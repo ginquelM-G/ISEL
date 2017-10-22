@@ -11,7 +11,7 @@ import com.android.volley.toolbox.Volley
 
 class UsingVolleyApp : Application() {
 
-    val request by lazy { Volley.newRequestQueue(this)}
+    val requestQueue by lazy { Volley.newRequestQueue(this)}
 
     override fun onCreate() {
         super.onCreate()
