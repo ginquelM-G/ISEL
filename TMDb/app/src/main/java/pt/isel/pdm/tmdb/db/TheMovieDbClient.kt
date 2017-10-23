@@ -1,5 +1,16 @@
 package pt.isel.pdm.tmdb.db
 
+import android.R
+import android.app.Application
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import com.android.volley.toolbox.JsonObjectRequest
+import org.json.JSONArray
+import org.json.JSONObject
+import pt.isel.pdm.tmdb.db.model.MovieSearchItem
+import pt.isel.pdm.tmdb.requestQueue
+
 /**
  * Created by User01 on 22/10/2017.
  */
@@ -13,6 +24,9 @@ class TheMovieDbClient {
     val MOVIE_POPULAR_QUERY: String ="https://api.themoviedb.org/3/movie/popular?api_key=%s"
     val MOVIE_BY_ID_QUERY: String ="https://api.themoviedb.org/3/movie/%d?api_key=%s"
 
+    companion object {
+        var res: Array<MovieSearchItem>? = null
+    }
 
 
     /*
@@ -26,13 +40,72 @@ class TheMovieDbClient {
 
 
 
+
+    fun JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as JSONObject }
+
     /// Pesquisa de	filmes por nome
     /// e.g.: https://api.themoviedb.org/3/search/movie?api_key=*****&query=war%20games
-    public fun search(title: String?){
-        var query: String = java.lang.String.format(SEARCH_QUERY, API_KEY, title)
-
+    public fun search(title: String?, application: Application) : Array<MovieSearchItem>?{
+        val query: String = java.lang.String.format(SEARCH_QUERY, API_KEY, title)
         println(query)
+
+        var res: Array<MovieSearchItem>? = null //res continua a null
+        val searchMovieItems1: MovieSearchItem
+        application.requestQueue.add(JsonObjectRequest(
+                //requestQueue.add(JsonObjectRequest(
+                query,
+                null,
+                {
+                    val jsonSearchMovieItem = it.get("results") as JSONArray
+                    Log.i("###$$", jsonSearchMovieItem.toString())
+                    Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
+
+
+                    val searchMovieItems = jsonSearchMovieItem
+                            .asSequence()
+                            .map {
+                                MovieSearchItem(
+                                        it["id"] as Int,
+                                        it["title"] as String
+                                )
+                            }
+                            .toList()
+                            .toTypedArray()
+
+                    println("####### "+ res?.size)
+                    res = searchMovieItems //res continua a null ??
+                    searchMovieItems.forEach { m ->  println(m.title + " " + m.id) }
+
+
+
+
+
+                    //Log.d("########MovieSearchItem_", MovieSearchItem_..toString())
+
+                 /*   var adapter = ArrayAdapter(this, R.layout.simple_list_item_1, searchMovieItems)
+                    listOfItem.adapter = adapter
+
+                    listOfItem.setOnItemClickListener { parent, view, position, ld ->
+                        Toast.makeText(this, searchMovieItems[position].toString(), Toast.LENGTH_SHORT).show()
+                    }*/
+
+                    Log.i("###:: ", searchMovieItems.toString())
+                },
+
+                {
+                    Log.e("ERROR:: ", it.toString())
+
+                })
+
+        )
+
+
+       println("###:: "+ res?.size)
+
+
+        return res
     }
+
 
     /// Filmes	em	cartaz
     /// e.g.: https://api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
@@ -71,4 +144,8 @@ class TheMovieDbClient {
 
         println(query)
     }
+
+
+
+
 }
