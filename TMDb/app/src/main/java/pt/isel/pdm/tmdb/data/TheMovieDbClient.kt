@@ -1,14 +1,11 @@
-package pt.isel.pdm.tmdb.db
+package pt.isel.pdm.tmdb.data
 
-import android.R
 import android.app.Application
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.android.volley.toolbox.JsonObjectRequest
 import org.json.JSONArray
 import org.json.JSONObject
-import pt.isel.pdm.tmdb.db.model.MovieSearchItem
+import pt.isel.pdm.tmdb.data.dtos.MovieSearchItem
 import pt.isel.pdm.tmdb.requestQueue
 
 /**
@@ -43,23 +40,22 @@ class TheMovieDbClient {
 
     fun JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as JSONObject }
 
+
     /// Pesquisa de	filmes por nome
     /// e.g.: https://api.themoviedb.org/3/search/movie?api_key=*****&query=war%20games
-    public fun search(title: String?, application: Application) : Array<MovieSearchItem>?{
-        val query: String = java.lang.String.format(SEARCH_QUERY, API_KEY, title)
+    public fun search(title: String?, application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit) : Unit{
+    //public fun search(title: String?, application: Application, arrayCb: (String) -> Unit) : Unit{
+
+        val query: String = String.format(SEARCH_QUERY, API_KEY, title)
         println(query)
 
-        var res: Array<MovieSearchItem>? = null //res continua a null
-        val searchMovieItems1: MovieSearchItem
         application.requestQueue.add(JsonObjectRequest(
                 //requestQueue.add(JsonObjectRequest(
                 query,
                 null,
                 {
                     val jsonSearchMovieItem = it.get("results") as JSONArray
-                    Log.i("###$$", jsonSearchMovieItem.toString())
                     Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
-
 
                     val searchMovieItems = jsonSearchMovieItem
                             .asSequence()
@@ -70,40 +66,19 @@ class TheMovieDbClient {
                                 )
                             }
                             .toList()
+                            //.toString()
                             .toTypedArray()
 
-                    println("####### "+ res?.size)
-                    res = searchMovieItems //res continua a null ??
-                    searchMovieItems.forEach { m ->  println(m.title + " " + m.id) }
-
-
-
-
+                    arrayCb(searchMovieItems)
 
                     //Log.d("########MovieSearchItem_", MovieSearchItem_..toString())
-
-                 /*   var adapter = ArrayAdapter(this, R.layout.simple_list_item_1, searchMovieItems)
-                    listOfItem.adapter = adapter
-
-                    listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                        Toast.makeText(this, searchMovieItems[position].toString(), Toast.LENGTH_SHORT).show()
-                    }*/
-
-                    Log.i("###:: ", searchMovieItems.toString())
                 },
 
                 {
                     Log.e("ERROR:: ", it.toString())
 
                 })
-
         )
-
-
-       println("###:: "+ res?.size)
-
-
-        return res
     }
 
 

@@ -1,4 +1,4 @@
-package pt.isel.pdm.tmdb.db.model
+package pt.isel.pdm.tmdb.data.dtos
 
 /**
  * Created by User01 on 22/10/2017.

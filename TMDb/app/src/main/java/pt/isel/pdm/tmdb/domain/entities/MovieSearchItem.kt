@@ -1,9 +1,9 @@
-package pt.isel.pdm.tmdb.db.model
+package pt.isel.pdm.tmdb.domain.entities
 
 /**
  * Created by User01 on 22/10/2017.
  */
-class MovieSearchItem_ {
+class MovieSearchItem(val id: Int, val title: String) {
 
 
 /**

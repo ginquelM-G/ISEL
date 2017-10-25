@@ -1,17 +1,13 @@
-package pt.isel.pdm.tmdb
+package pt.isel.pdm.tmdb.view
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.ListView
-import android.widget.Toast
-import com.android.volley.toolbox.JsonObjectRequest
+import android.widget.*
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
 import org.json.JSONObject
-import pt.isel.pdm.tmdb.db.TheMovieDbClient
-import pt.isel.pdm.tmdb.db.model.MovieSearchItem
+import pt.isel.pdm.tmdb.R
+import pt.isel.pdm.tmdb.data.TheMovieDbClient
 
 
 class MainActivity : AppCompatActivity() {
@@ -32,14 +28,24 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        /**
+        val textBox = findViewById(R.id.textBox) as TextView
 
-        var searchMovieItems = dbCLient.search("Batman", application)
-        var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, searchMovieItems)
-        listOfItem.adapter = adapter
 
-        listOfItem.setOnItemClickListener { parent, view, position, ld ->
-            Toast.makeText(this, searchMovieItems.toString(), Toast.LENGTH_SHORT).show()
-        }
+        var searchMovieItems = dbCLient.search("Batman", application, {x ->
+            //var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,x)
+           // listOfItem.adapter = adapter
+            textBox.setText(x)
+        })
+*/
+        var searchMovieItems1 = dbCLient.search("Batman", application, { movieItems ->
+            var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
+            listOfItem.adapter = adapter
+            listOfItem.setOnItemClickListener { parent, view, position, ld ->
+                Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
+            }
+        })
+
 
         /**
         application.requestQueue.add(JsonObjectRequest(
@@ -56,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     val searchMovieItems = jsonSearchMovieItem
                             .asSequence()
                             .map {
-                                MovieSearchItem(
+                                MovieSearchItem.kt(
                                         it["id"] as Int,
                                         it["title"] as String
                                 )
