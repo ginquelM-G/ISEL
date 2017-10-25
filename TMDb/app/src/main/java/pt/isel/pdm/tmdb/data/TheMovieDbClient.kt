@@ -45,7 +45,6 @@ class TheMovieDbClient {
     /// e.g.: https://api.themoviedb.org/3/search/movie?api_key=*****&query=war%20games
     public fun search(title: String?, application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit) : Unit{
     //public fun search(title: String?, application: Application, arrayCb: (String) -> Unit) : Unit{
-
         val query: String = String.format(SEARCH_QUERY, API_KEY, title)
         println(query)
 
@@ -70,10 +69,8 @@ class TheMovieDbClient {
                             .toTypedArray()
 
                     arrayCb(searchMovieItems)
-
                     //Log.d("########MovieSearchItem_", MovieSearchItem_..toString())
                 },
-
                 {
                     Log.e("ERROR:: ", it.toString())
 
@@ -84,10 +81,39 @@ class TheMovieDbClient {
 
     /// Filmes	em	cartaz
     /// e.g.: https://api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
-    public fun movieNowPlaying(title: String?){
+    public fun movieNowPlaying(application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
         var query: String = java.lang.String.format(MOVIE_NOW_PLAYING_QUERY, API_KEY)
-
         println(query)
+
+        application.requestQueue.add(JsonObjectRequest(
+                query,
+                null,
+                {
+                    val jsonSearchMovieItem = it.get("results") as JSONArray
+                    Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
+
+                    val searchMovieItems = jsonSearchMovieItem
+                            .asSequence()
+                            .map {
+                                MovieSearchItem(
+                                        it["id"] as Int,
+                                        it["title"] as String
+                                )
+                            }
+                            .toList()
+                            //.toString()
+                            .toTypedArray()
+
+                    arrayCb(searchMovieItems)
+                },
+                {
+                    Log.e("ERROR:: ", it.toString())
+
+                })
+        )
+
+
+
     }
 
 

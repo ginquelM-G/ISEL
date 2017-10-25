@@ -1,7 +1,10 @@
 package pt.isel.pdm.tmdb.view
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.*
 import com.android.volley.toolbox.Volley
 import org.json.JSONArray
@@ -24,72 +27,58 @@ class MainActivity : AppCompatActivity() {
     private val listOfItem by lazy { findViewById(R.id.list_itens) as ListView}
     private val MOVIE_SEARCH = "https://api.themoviedb.org/3/search/movie?api_key=b531994cdfaa8e3b441e4086b1c6756d&query=Batman"
     private val dbCLient = TheMovieDbClient()
+    private var movieName1: String? = null
+    private var edTxt_nomeDoFilme: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        /**
-        val textBox = findViewById(R.id.textBox) as TextView
+        setContentView(R.layout.activity_main_1)
+
+        edTxt_nomeDoFilme = findViewById(R.id.nomeDoFilme) as EditText
+        var bt_searchMovieByName = findViewById(R.id.bt_searchMovieByName) as Button
+        var bt_movieNowPlaying = findViewById(R.id.bt_movieNowPlaying) as Button
+        var bt_movieUpcoming = findViewById(R.id.bt_movieUpcoming) as Button
+        var bt_moviePopular = findViewById(R.id.bt_moviePopular) as Button
 
 
-        var searchMovieItems = dbCLient.search("Batman", application, {x ->
-            //var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,x)
-           // listOfItem.adapter = adapter
-            textBox.setText(x)
-        })
-*/
-        var searchMovieItems1 = dbCLient.search("Batman", application, { movieItems ->
-            var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
-            listOfItem.adapter = adapter
-            listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
-            }
-        })
+      /*
+        bt_searchMovieByName.setOnClickListener {startActivity(Intent(this, ResultsActivity::class.java))  }
+      */
+        bt_searchMovieByName.setOnClickListener(getOnClickListener())
+        bt_movieNowPlaying.setOnClickListener(getOnClickListener())
 
 
-        /**
-        application.requestQueue.add(JsonObjectRequest(
-        //requestQueue.add(JsonObjectRequest(
-                MOVIE_SEARCH,
-                null,
-                {
-                    val jsonSearchMovieItem = it.get("results") as JSONArray
 
 
-                    Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
-
-
-                    val searchMovieItems = jsonSearchMovieItem
-                            .asSequence()
-                            .map {
-                                MovieSearchItem.kt(
-                                        it["id"] as Int,
-                                        it["title"] as String
-                                )
-                            }
-                            .toList()
-                            .toTypedArray()
-
-
-                    //Log.d("########MovieSearchItem_", MovieSearchItem_..toString())
-
-                    var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, searchMovieItems)
-                    listOfItem.adapter = adapter
-
-                    listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                        Toast.makeText(this, searchMovieItems[position].toString(), Toast.LENGTH_SHORT).show()
-                    }
-
-                },
-
-                {
-                    Log.e("ERROR:: ", it.toString())
-
-                })
-
-        )
-        */
     }
+
+
+    private fun getOnClickListener(): View.OnClickListener{
+        return View.OnClickListener {
+            var intent =  Intent(this, ResultsActivity::class.java)
+            intent.putExtra("MOVIE_NAME",  edTxt_nomeDoFilme?.text.toString())
+
+            startActivity(intent)
+            //startActivity(Intent(this, ResultsActivity::class.java))
+            edTxt_nomeDoFilme?.setText("")
+
+        }
+    }
+
+/**
+    private fun getOnClickListener2():  View.OnClickListener{
+
+        return View.OnClickListener {
+            dbCLient.movieNowPlaying(application, { movieItems ->
+                var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
+                listOfItem.adapter = adapter
+                listOfItem.setOnItemClickListener { parent, view, position, ld ->
+                    Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+    }
+    */
 
 
 
