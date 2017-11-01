@@ -44,38 +44,7 @@ class TheMovieDbClient {
         val query: String = String.format(SEARCH_QUERY, API_KEY, title, getLanguage(lang))
         println(query)
 
-        //addRequestQueue(query, application, arrayCb)
-
-        application.requestQueue.add(JsonObjectRequest(
-                //requestQueue.add(JsonObjectRequest(
-                query,
-                null,
-                {
-                    val jsonSearchMovieItem = it.get("results") as JSONArray
-                    Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
-
-                    val searchMovieItems = jsonSearchMovieItem
-                            .asSequence()
-                            .map {
-                                MovieSearchItem(
-                                        it["id"] as Int,
-                                        it["title"] as String,
-                                        null
-                                )
-                            }
-                            .toList()
-                            //.toString()
-                            .toTypedArray()
-
-                    arrayCb(searchMovieItems)
-                    //Log.d("########MovieSearchItem_", MovieSearchItem_..toString())
-                },
-                {
-                    Log.e("ERROR:: ", it.toString())
-
-                })
-        )
-
+        addRequestQueueToSearch(query, application, arrayCb)
     }
 
 
@@ -173,6 +142,38 @@ class TheMovieDbClient {
                 })
         )
     }
+
+
+    private fun addRequestQueueToSearch(query: String, application: Application, arrayResultCb: (Array<MovieSearchItem>) -> Unit){
+        application.requestQueue.add(JsonObjectRequest(
+                query,
+                null,
+                {
+                    val jsonSearchMovieItem = it.get("results") as JSONArray
+                    Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
+
+                    val searchMovieItems = jsonSearchMovieItem
+                            .asSequence()
+                            .map {
+                                MovieSearchItem(
+                                        it["id"] as Int,
+                                        it["title"] as String,
+                                        null
+                                )
+                            }
+                            .toList()
+                            //.toString()
+                            .toTypedArray()
+
+                    arrayResultCb(searchMovieItems)
+                },
+                {
+                    Log.e("ERROR:: ", it.toString())
+
+                })
+        )
+    }
+
 
 
 
