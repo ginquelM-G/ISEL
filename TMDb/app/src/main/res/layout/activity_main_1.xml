@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="serif-monospace"
-        android:text="Welcome..."
+        android:text="@string/welcome"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryDark"
@@ -41,7 +41,7 @@
             android:id="@+id/bt_searchMovieByName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Movie Name:   "
+            android:text="@string/movieName"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="52dp" />
 
@@ -62,25 +62,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.01"
-            android:text="Movie Now Playing" />
+            android:text="@string/movieNP" />
 
         <Button
             android:id="@+id/bt_movieUpcoming"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Movie Upcoming" />
+            android:text="@string/movieUpC" />
 
         <Button
             android:id="@+id/bt_moviePopular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Popular Movie" />
+            android:text="@string/moviePop" />
 
         <Button
             android:id="@+id/bt_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Info" />
+            android:text="@string/info" />
 
 
     </LinearLayout>

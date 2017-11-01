@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import pt.isel.pdm.tmdb.R
 import pt.isel.pdm.tmdb.R.id.tv_movieDetails
+import java.util.*
 
 /**
  * Created by User01 on 01/11/2017.
@@ -18,13 +19,8 @@ class InfoActivity: AppCompatActivity() {
         setContentView(R.layout.movies_details)
 
         tv_info =  findViewById(R.id.tv_movieDetails) as TextView
-
-        var info = "\nAuthours: \nGinquel Moreira" + "\nTony Mendes" +
-                "\n\nData source: \nThe Movie Database \nhttps://www.themoviedb.org"
-        tv_info?.text = info
-
-
-
+        tv_info?.text = resources.getText(R.string.authorsTxt)
+        tv_info?.textSize = 25F
     }
 }
 

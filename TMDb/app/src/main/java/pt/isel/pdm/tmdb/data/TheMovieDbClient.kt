@@ -8,6 +8,7 @@ import org.json.JSONObject
 import pt.isel.pdm.tmdb.data.dtos.MovieDetails
 import pt.isel.pdm.tmdb.data.dtos.MovieSearchItem
 import pt.isel.pdm.tmdb.requestQueue
+import java.util.*
 
 /**
  * Created by User01 on 22/10/2017.
@@ -15,11 +16,11 @@ import pt.isel.pdm.tmdb.requestQueue
 class TheMovieDbClient {
 
     private val API_KEY : String = "b531994cdfaa8e3b441e4086b1c6756d"
-    private val SEARCH_QUERY: String ="https://api.themoviedb.org/3/search/movie?api_key=%s&query=%s"
-    private val MOVIE_NOW_PLAYING_QUERY: String ="https://api.themoviedb.org/3/movie/now_playing?api_key=%s"
-    private val MOVIE_UPCOMING_QUERY: String ="https://api.themoviedb.org/3/movie/upcoming?api_key=%s"
-    private val MOVIE_POPULAR_QUERY: String ="https://api.themoviedb.org/3/movie/popular?api_key=%s"
-    private val MOVIE_BY_ID_QUERY: String ="https://api.themoviedb.org/3/movie/%d?api_key=%s"
+    private val SEARCH_QUERY: String ="https://api.themoviedb.org/3/search/movie?api_key=%s&query=%s&language=%s"
+    private val MOVIE_NOW_PLAYING_QUERY: String ="https://api.themoviedb.org/3/movie/now_playing?api_key=%s&language=%s"
+    private val MOVIE_UPCOMING_QUERY: String ="https://api.themoviedb.org/3/movie/upcoming?api_key=%s&language=%s"
+    private val MOVIE_POPULAR_QUERY: String ="https://api.themoviedb.org/3/movie/popular?api_key=%s&language=%s"
+    private val MOVIE_BY_ID_QUERY: String ="https://api.themoviedb.org/3/movie/%d?api_key=%s&language=%s"
 
 
     /*
@@ -33,14 +34,14 @@ class TheMovieDbClient {
 
 
 
-
+    private var lang = Locale.getDefault().language
     private fun JSONArray.asSequence() = (0 until length()).asSequence().map { get(it) as JSONObject }
 
 
     /// Pesquisa de	filmes por nome
     /// e.g.: https://api.themoviedb.org/3/search/movie?api_key=*****&query=war%20games
     fun search(title: String?, application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit) : Unit{
-        val query: String = String.format(SEARCH_QUERY, API_KEY, title)
+        val query: String = String.format(SEARCH_QUERY, API_KEY, title, getLanguage(lang))
         println(query)
 
         //addRequestQueue(query, application, arrayCb)
@@ -81,7 +82,7 @@ class TheMovieDbClient {
     /// Filmes	em	cartaz
     /// e.g.: https://api.themoviedb.org/3/movie/now_playing?api_key=<<api_key>>&language=en-US&page=1
     fun movieNowPlaying(application: Application, resultCb: (Array<MovieSearchItem>) -> Unit){
-        val query: String = java.lang.String.format(MOVIE_NOW_PLAYING_QUERY, API_KEY)
+        val query: String = String.format(MOVIE_NOW_PLAYING_QUERY, API_KEY, getLanguage(lang))
         println(query)
         addRequestQueue(query, application, resultCb)
     }
@@ -93,7 +94,7 @@ class TheMovieDbClient {
     /// Estreias para breve
     /// e.g.: https://api.themoviedb.org/3/movie/upcoming?api_key=<<api_key>>&language=en-US&page=1
     fun movieUpcoming(application: Application, resultCb: (Array<MovieSearchItem>) -> Unit){
-        val query: String = java.lang.String.format(MOVIE_UPCOMING_QUERY, API_KEY)
+        val query: String = java.lang.String.format(MOVIE_UPCOMING_QUERY, API_KEY, getLanguage(lang))
         println(query)
         addRequestQueue(query, application, resultCb)
     }
@@ -102,17 +103,19 @@ class TheMovieDbClient {
     /// Pesquisa de	filmes por nome
     /// e.g.: https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
     fun moviePopular(application: Application, resultCb: (Array<MovieSearchItem>) -> Unit){
-        val query: String = java.lang.String.format(MOVIE_POPULAR_QUERY, API_KEY)
+        val query: String = java.lang.String.format(MOVIE_POPULAR_QUERY, API_KEY, getLanguage(lang))
         println(query)
         addRequestQueue(query, application, resultCb)
     }
+
 
 
     /// Informação do filme
     /// e.g.: https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>
     //public fun movieDetails(id: Int, application: Application, resultCb: (Array<MovieSearchItem>) -> Unit){
     fun movieDetails(id: Int, application: Application, resultCb: (String) -> Unit){
-        val query: String = String.format(MOVIE_BY_ID_QUERY, id, API_KEY)
+        //if (lang.equals("pt"))lang="pt-PT" else lang="en-EU"
+        val query: String = String.format(MOVIE_BY_ID_QUERY, id, API_KEY,getLanguage(lang))
         println(query)
         //addRequestQueue(query, application, arrayCb)
 
@@ -141,7 +144,7 @@ class TheMovieDbClient {
     }
 
 
-    fun addRequestQueue(query: String, application: Application, arrayResultCb: (Array<MovieSearchItem>) -> Unit){
+    private fun addRequestQueue(query: String, application: Application, arrayResultCb: (Array<MovieSearchItem>) -> Unit){
         application.requestQueue.add(JsonObjectRequest(
                 query,
                 null,
@@ -174,5 +177,11 @@ class TheMovieDbClient {
 
 
 
-
+    private fun getLanguage(lang: String): String{
+        when(lang) {
+            "pt" -> return "pt-PT"
+            "en" -> return "en-US"
+        }
+        return "en-US"
+    }
 }

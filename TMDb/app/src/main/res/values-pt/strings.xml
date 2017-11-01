@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TMDb</string>
+    <string name="welcome">Benvindo ...</string>
+    <string name="movieName">Nome do Filme   </string>
+    <string name="movieNP">Filmes em Cartaz</string>
+    <string name="movieUpC">Estreias Para Breve</string>
+    <string name="moviePop">Filmes mais Populares</string>
+    <string name="info">Informação</string>
+    <string name="authors">Autores</string>
+
+    <string name="title">Titulo: </string>
+    <string name="releaseDate">Data de Lançamento: </string>
+
+    <string name="authorsTxt">\nAutores: \nGinquel Moreira \nTony Mendes \n\nFonte dos Dados: \nThe Movie Database \nhttps://www.themoviedb.org</string>
+
+</resources>

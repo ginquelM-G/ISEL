@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">TMDb</string>
+    <string name="welcome">Welcome ...</string>
+    <string name="movieName">Movie Name   </string>
+    <string name="movieNP">Movie Now Playing</string>
+    <string name="movieUpC">Movie Upcoming</string>
+    <string name="moviePop">Movie Popular</string>
+    <string name="info">Info</string>
+    <string name="authors">authors</string>
+
+    <string name="title">Title: </string>
+    <string name="releaseDate">Release Date: </string>
+
+    <string name="authorsTxt">\nAuthors: \nGinquel Moreira \nTony Mendes \n\nData source: \nThe Movie Database \nhttps://www.themoviedb.org</string>
+    <!--<string name="authorsTxt">\nAuthors: \nGinquel Moreira" + "\nTony Mendes" +
+                "\n\nData source: \nThe Movie Database \nhttps://www.themoviedb.org</string>-->
 </resources>
