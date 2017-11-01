@@ -21,7 +21,8 @@ data class MovieSearchItem(val id: Int, val title: String, val release_date: Str
 }
 
 
-data class MovieDetails(val id: Int, val title: String, val popularity: Double,val vote_average: Double,  val release_date: String?, val overview: String) {
+data class MovieDetails(val id: Int, val title: String, val popularity: Double,
+                        val vote_average: Double,  val release_date: String?,val poster_path: String, val overview: String) {
     override fun toString(): String {
         var res =  "Id: $id \n\nTitle: $title \n\nPopularity: $popularity" +
                 "\n\nVote Average: $vote_average \n\nRelease Date: $release_date \n\nOverview: $overview"

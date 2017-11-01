@@ -26,7 +26,7 @@ class ResultsActivity: AppCompatActivity() {
         val movieNP: String = intent?.getStringExtra("MOVIE_NOW_PLAYING")?:"empty"
         val movieUpC: String = intent?.getStringExtra("MOVIE_UPCOMING")?:"empty"
         val moviePop: String = intent?.getStringExtra("MOVIE_POPULAR")?:"empty"
-        val movieDetails: Int = intent.getIntExtra("MOVIE_DETAILS",-1)?:-1
+        //val movieDetails: Int = intent.getIntExtra("MOVIE_DETAILS",-1)?:-1
 
         if("movieNowPlaying".equals(movieNP)){
             dbCLient.movieNowPlaying(application, {movieItens -> callBack(movieItens)})
@@ -36,23 +36,10 @@ class ResultsActivity: AppCompatActivity() {
 
         }else if("moviePopular".equals(moviePop)){
             dbCLient.moviePopular(application, {movieItens -> callBackTOPopularMovies(movieItens)})
-        }else if(-1 != movieDetails ){
-            //dbCLient.movieDetails(movieDetails, application, {movieItens -> callBack(movieItens)})
         }
         else if(!"empty".equals(movieName) || !"".equals(movieName)){
             dbCLient.search(movieName, application, {movieItens -> callBack(movieItens)})
-        }
-        /**
-            if("empty".equals(movieName) || "".equals(movieName)){
-            Log.e("MOVIE_NAME", "IGUAL A NULL")
-            dbCLient.movieNowPlaying(application, { movieItems ->
-                var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
-                listOfItem.adapter = adapter
-                listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                    Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
-                }
-            })
-         */
+        }//else if(-1 != movieDetails ){ //dbCLient.movieDetails(movieDetails, application, {movieItens -> callBack(movieItens)}) }
 
     }
 

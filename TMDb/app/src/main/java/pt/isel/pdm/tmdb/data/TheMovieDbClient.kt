@@ -82,7 +82,7 @@ class TheMovieDbClient {
     /// Informação do filme
     /// e.g.: https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>
     //public fun movieDetails(id: Int, application: Application, resultCb: (Array<MovieSearchItem>) -> Unit){
-    fun movieDetails(id: Int, application: Application, resultCb: (String) -> Unit){
+    fun movieDetails(id: Int, application: Application, resultCb: (MovieDetails) -> Unit){
         //if (lang.equals("pt"))lang="pt-PT" else lang="en-EU"
         val query: String = String.format(MOVIE_BY_ID_QUERY, id, API_KEY,getLanguage(lang))
         println(query)
@@ -99,8 +99,9 @@ class TheMovieDbClient {
                                 it["popularity"] as Double,
                                 it["vote_average"] as Double,
                                 it["release_date"] as String,
+                                it["poster_path"] as String,
                                 it["overview"] as String
-                                ).toString()
+                                )
 
                     System.err.println("\n\nmovieDetails:\n"+ movieDetails)
                     resultCb(movieDetails)
