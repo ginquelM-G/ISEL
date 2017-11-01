@@ -29,31 +29,34 @@ class MainActivity : AppCompatActivity() {
     private val dbCLient = TheMovieDbClient()
     private var movieName1: String? = null
     private var edTxt_nomeDoFilme: EditText? = null
+    private var edTxt_idDoFilme: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_1)
 
         edTxt_nomeDoFilme = findViewById(R.id.nomeDoFilme) as EditText
-        var bt_searchMovieByName = findViewById(R.id.bt_searchMovieByName) as Button
-        var bt_movieNowPlaying = findViewById(R.id.bt_movieNowPlaying) as Button
-        var bt_movieUpcoming = findViewById(R.id.bt_movieUpcoming) as Button
-        var bt_moviePopular = findViewById(R.id.bt_moviePopular) as Button
+        edTxt_idDoFilme = findViewById(R.id.idDoFilme) as EditText
+        val bt_searchMovieByName = findViewById(R.id.bt_searchMovieByName) as Button
+        val bt_movieNowPlaying = findViewById(R.id.bt_movieNowPlaying) as Button
+        val bt_movieUpcoming = findViewById(R.id.bt_movieUpcoming) as Button
+        val bt_moviePopular = findViewById(R.id.bt_moviePopular) as Button
+        val bt_movieDetails = findViewById(R.id.bt_movieDetails) as Button
 
 
       /*
         bt_searchMovieByName.setOnClickListener {startActivity(Intent(this, ResultsActivity::class.java))  }
       */
-        bt_searchMovieByName.setOnClickListener(getOnClickListener())
-        bt_movieNowPlaying.setOnClickListener(getOnClickListener())
-
-
-
+        bt_searchMovieByName.setOnClickListener(getOnClickListenerToSearchM())
+        bt_movieNowPlaying.setOnClickListener(getOnClickListenerToMovieNP())
+        bt_movieUpcoming.setOnClickListener(getOnClickListenerToUpCommingMovie())
+        bt_moviePopular.setOnClickListener(getOnClickListenerToPopularM())
+        bt_movieDetails.setOnClickListener(getOnClickListenerToDetailsM())
 
     }
 
 
-    private fun getOnClickListener(): View.OnClickListener{
+    private fun getOnClickListenerToSearchM(): View.OnClickListener{
         return View.OnClickListener {
             var intent =  Intent(this, ResultsActivity::class.java)
             intent.putExtra("MOVIE_NAME",  edTxt_nomeDoFilme?.text.toString())
@@ -65,20 +68,50 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-/**
-    private fun getOnClickListener2():  View.OnClickListener{
 
+    private fun getOnClickListeners(): View.OnClickListener{
         return View.OnClickListener {
-            dbCLient.movieNowPlaying(application, { movieItems ->
-                var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
-                listOfItem.adapter = adapter
-                listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                    Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
-                }
-            })
+
         }
     }
-    */
+
+    private fun getOnClickListenerToMovieNP():  View.OnClickListener {
+        return View.OnClickListener {
+            var intent = Intent(this, ResultsActivity::class.java)
+            intent.putExtra("MOVIE_NOW_PLAYING", "movieNowPlaying")
+            startActivity(intent)
+        }
+    }
+
+
+    private fun getOnClickListenerToUpCommingMovie():  View.OnClickListener {
+        return View.OnClickListener {
+            var intent = Intent(this, ResultsActivity::class.java)
+            intent.putExtra("MOVIE_UPCOMING", "movieUpcoming")
+            startActivity(intent)
+        }
+    }
+
+    private fun getOnClickListenerToPopularM():  View.OnClickListener {
+        System.out.println("POP")
+        return View.OnClickListener {
+            var intent = Intent(this, ResultsActivity::class.java)
+            intent.putExtra("MOVIE_POPULAR", "moviePopular")
+
+            startActivity(intent)
+        }
+    }
+
+    private fun getOnClickListenerToDetailsM():  View.OnClickListener {
+        return View.OnClickListener {
+            var intent = Intent(this, ResultsOfMovieDetails::class.java)
+            intent.putExtra("MOVIE_DETAILS", edTxt_idDoFilme?.text.toString().toInt())
+
+            startActivity(intent)
+            edTxt_idDoFilme?.setText("")
+        }
+    }
+
 
 
 

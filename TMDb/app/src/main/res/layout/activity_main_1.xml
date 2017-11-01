@@ -29,8 +29,7 @@
             android:id="@+id/bt_searchMovieByName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick=""
-            android:text="Movie Name: "
+            android:text="Movie Name:   "
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="52dp" />
 
@@ -65,16 +64,36 @@
             android:layout_height="wrap_content"
             android:text="Popular Movie" />
 
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:id="@+id/idDoFilme"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/bt_movieDetails"
+            android:layout_toEndOf="@+id/bt_movieDetails"
+            android:inputType="numberDecimal"
+            android:text=""/>
+
         <Button
-            android:id="@+id/movieDetails"
-            android:layout_width="match_parent"
+            android:id="@+id/bt_movieDetails"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Movie Details" />
 
 
-
-    </LinearLayout>
-
+    </RelativeLayout>
 
     <!--app:layout_constraintBottom_toBottomOf="parent"-->
     <!--app:layout_constraintLeft_toLeftOf="parent"-->

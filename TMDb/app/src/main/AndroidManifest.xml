@@ -21,6 +21,7 @@
         </activity>
 
         <activity android:name=".view.ResultsActivity"></activity>
+        <activity android:name=".view.ResultsOfMovieDetails"></activity>
     </application>
 
 </manifest>

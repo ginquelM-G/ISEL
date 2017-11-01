@@ -1,14 +1,13 @@
 package pt.isel.pdm.tmdb.view
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.Toast
 import pt.isel.pdm.tmdb.R
 import pt.isel.pdm.tmdb.data.TheMovieDbClient
+import pt.isel.pdm.tmdb.data.dtos.MovieSearchItem
 
 /**
  * Created by User01 on 25/10/2017.
@@ -20,11 +19,30 @@ class ResultsActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_results)
 
-        var movieName: String = intent?.getStringExtra("MOVIE_NAME")?:"empty"
+        val movieName: String = intent?.getStringExtra("MOVIE_NAME")?:"empty"
+        val movieNP: String = intent?.getStringExtra("MOVIE_NOW_PLAYING")?:"empty"
+        val movieUpC: String = intent?.getStringExtra("MOVIE_UPCOMING")?:"empty"
+        val moviePop: String = intent?.getStringExtra("MOVIE_POPULAR")?:"empty"
+        val movieDetails: Int = intent.getIntExtra("MOVIE_DETAILS",-1)?:-1
 
-        if("empty".equals(movieName) || "".equals(movieName)){
+        if("movieNowPlaying".equals(movieNP)){
+            dbCLient.movieNowPlaying(application, {movieItens -> callBack(movieItens)})
+        }
+        else  if("movieUpcoming".equals(movieUpC)){
+            dbCLient.movieUpcoming(application, {movieItens -> callBack(movieItens)})
+
+        }else if("moviePopular".equals(moviePop)){
+            dbCLient.moviePopular(application, {movieItens -> callBack(movieItens)})
+        }else if(-1 != movieDetails ){
+            //dbCLient.movieDetails(movieDetails, application, {movieItens -> callBack(movieItens)})
+        }
+        else if(!"empty".equals(movieName) || !"".equals(movieName)){
+            dbCLient.search(movieName, application, {movieItens -> callBack(movieItens)})
+        }
+        /**
+            if("empty".equals(movieName) || "".equals(movieName)){
             Log.e("MOVIE_NAME", "IGUAL A NULL")
             dbCLient.movieNowPlaying(application, { movieItems ->
                 var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
@@ -33,15 +51,17 @@ class ResultsActivity: AppCompatActivity() {
                     Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
                 }
             })
-        }
-        else {
-            dbCLient.search(movieName, application, { movieItems ->
-                var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
-                listOfItem.adapter = adapter
-                listOfItem.setOnItemClickListener { parent, view, position, ld ->
-                    Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
-                }
-            })
-        }
+         */
+
     }
+
+
+    fun callBack(movieItems: Array<MovieSearchItem>){
+            var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
+            listOfItem.adapter = adapter
+            listOfItem.setOnItemClickListener { parent, view, position, ld ->
+                Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
+            }
+    }
+
 }

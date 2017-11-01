@@ -14,7 +14,6 @@ import pt.isel.pdm.tmdb.requestQueue
 class TheMovieDbClient {
 
     val API_KEY : String = "b531994cdfaa8e3b441e4086b1c6756d"
-
     val SEARCH_QUERY: String ="https://api.themoviedb.org/3/search/movie?api_key=%s&query=%s"
     val MOVIE_NOW_PLAYING_QUERY: String ="https://api.themoviedb.org/3/movie/now_playing?api_key=%s"
     val MOVIE_UPCOMING_QUERY: String ="https://api.themoviedb.org/3/movie/upcoming?api_key=%s"
@@ -24,7 +23,6 @@ class TheMovieDbClient {
     companion object {
         var res: Array<MovieSearchItem>? = null
     }
-
 
     /*
     	considere	os	seguintes	endpoints:
@@ -61,7 +59,8 @@ class TheMovieDbClient {
                             .map {
                                 MovieSearchItem(
                                         it["id"] as Int,
-                                        it["title"] as String
+                                        it["title"] as String,
+                                        null
                                 )
                             }
                             .toList()
@@ -84,7 +83,66 @@ class TheMovieDbClient {
     public fun movieNowPlaying(application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
         var query: String = java.lang.String.format(MOVIE_NOW_PLAYING_QUERY, API_KEY)
         println(query)
+        addRequestQueue(query, application, arrayCb)
+    }
 
+
+
+
+
+    /// Estreias para breve
+    /// e.g.: https://api.themoviedb.org/3/movie/upcoming?api_key=<<api_key>>&language=en-US&page=1
+    public fun movieUpcoming(application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
+        var query: String = java.lang.String.format(MOVIE_UPCOMING_QUERY, API_KEY)
+        println(query)
+        addRequestQueue(query, application, arrayCb)
+    }
+
+
+    /// Pesquisa de	filmes por nome
+    /// e.g.: https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
+    public fun moviePopular(application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
+        var query: String = java.lang.String.format(MOVIE_POPULAR_QUERY, API_KEY)
+        println(query)
+        addRequestQueue(query, application, arrayCb)
+    }
+
+
+    /// Informação do filme
+    /// e.g.: https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>
+    //public fun movieDetails(id: Int, application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
+    fun movieDetails(id: Int, application: Application, arrayCb: (String) -> Unit){
+        var query: String = java.lang.String.format(MOVIE_BY_ID_QUERY, id, API_KEY)
+        println(query)
+        //addRequestQueue(query, application, arrayCb)
+
+        application.requestQueue.add(JsonObjectRequest(
+                query,
+                null,
+                {
+                   // val jsonSearchMovieItem = it.get("results") as JSONArray
+                    //Log.i("jsonSearchMovieItem:", jsonSearchMovieItem.toString())
+
+
+                    var searchMovieItems = MovieSearchItem(
+                                        it["id"] as Int,
+                                        it["title"] as String,
+                                        it["release_date"] as String
+                                ).toString()
+
+                    System.err.println("\n\n"+ searchMovieItems)
+
+                    arrayCb(searchMovieItems)
+                },
+                {
+                    Log.e("ERROR:: ", it.toString())
+
+                })
+        )
+    }
+
+
+    fun addRequestQueue(query: String, application: Application, arrayCb: (Array<MovieSearchItem>) -> Unit){
         application.requestQueue.add(JsonObjectRequest(
                 query,
                 null,
@@ -97,7 +155,8 @@ class TheMovieDbClient {
                             .map {
                                 MovieSearchItem(
                                         it["id"] as Int,
-                                        it["title"] as String
+                                        it["title"] as String,
+                                        it["release_date"] as String
                                 )
                             }
                             .toList()
@@ -111,42 +170,6 @@ class TheMovieDbClient {
 
                 })
         )
-
-
-
     }
-
-
-
-
-
-    /// Estreias para breve
-    /// e.g.: https://api.themoviedb.org/3/movie/upcoming?api_key=<<api_key>>&language=en-US&page=1
-    public fun movieUpcoming(){
-        var query: String = java.lang.String.format(MOVIE_UPCOMING_QUERY, API_KEY)
-
-        println(query)
-    }
-
-
-    /// Pesquisa de	filmes por nome
-    /// e.g.: https://api.themoviedb.org/3/movie/popular?api_key=<<api_key>>&language=en-US&page=1
-    public fun moviePopular(title: String?){
-        var query: String = java.lang.String.format(MOVIE_POPULAR_QUERY, API_KEY)
-
-        println(query)
-    }
-
-
-    /// Informação do filme
-    /// e.g.: https://api.themoviedb.org/3/movie/{movie_id}?api_key=<<api_key>>
-    public fun movieDetails(id: Int?){
-        var query: String = java.lang.String.format(MOVIE_BY_ID_QUERY, API_KEY, id)
-
-        println(query)
-    }
-
-
-
 
 }
