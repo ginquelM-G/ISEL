@@ -3,7 +3,6 @@ package pt.isel.pdm.tmdb.view
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import com.android.volley.toolbox.Volley
@@ -29,19 +28,19 @@ class MainActivity : AppCompatActivity() {
     private val dbCLient = TheMovieDbClient()
     private var movieName1: String? = null
     private var edTxt_nomeDoFilme: EditText? = null
-    private var edTxt_idDoFilme: EditText? = null
+    //private var edTxt_idDoFilme: EditText? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_1)
 
         edTxt_nomeDoFilme = findViewById(R.id.nomeDoFilme) as EditText
-        edTxt_idDoFilme = findViewById(R.id.idDoFilme) as EditText
+        //edTxt_idDoFilme = findViewById(R.id.idDoFilme) as EditText
         val bt_searchMovieByName = findViewById(R.id.bt_searchMovieByName) as Button
         val bt_movieNowPlaying = findViewById(R.id.bt_movieNowPlaying) as Button
         val bt_movieUpcoming = findViewById(R.id.bt_movieUpcoming) as Button
         val bt_moviePopular = findViewById(R.id.bt_moviePopular) as Button
-        val bt_movieDetails = findViewById(R.id.bt_movieDetails) as Button
+        val bt_info = findViewById(R.id.bt_info) as Button
 
 
       /*
@@ -51,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         bt_movieNowPlaying.setOnClickListener(getOnClickListenerToMovieNP())
         bt_movieUpcoming.setOnClickListener(getOnClickListenerToUpCommingMovie())
         bt_moviePopular.setOnClickListener(getOnClickListenerToPopularM())
-        bt_movieDetails.setOnClickListener(getOnClickListenerToDetailsM())
+        bt_info.setOnClickListener(getOnClickListenerToInfo())
+        //bt_movieDetails.setOnClickListener(getOnClickListenerToDetailsM())
 
     }
 
@@ -102,15 +102,19 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getOnClickListenerToDetailsM():  View.OnClickListener {
+
+
+    private fun getOnClickListenerToInfo():  View.OnClickListener {
         return View.OnClickListener {
-            var intent = Intent(this, ResultsOfMovieDetails::class.java)
-            intent.putExtra("MOVIE_DETAILS", edTxt_idDoFilme?.text.toString().toInt())
+            var intent = Intent(this, InfoActivity::class.java)
+            //intent.putExtra("MOVIE_DETAILS", edTxt_idDoFilme?.text.toString().toInt())
 
             startActivity(intent)
-            edTxt_idDoFilme?.setText("")
+            //edTxt_idDoFilme?.setText("")
         }
     }
+
+
 
 
 

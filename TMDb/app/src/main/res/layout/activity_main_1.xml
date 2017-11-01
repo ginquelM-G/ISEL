@@ -7,6 +7,18 @@
     android:orientation="vertical"
     tools:context="pt.isel.pdm.tmdb.view.MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="Welcome..."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="30sp"
+        android:textStyle="italic"
+        android:paddingBottom="30sp"/>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -64,11 +76,17 @@
             android:layout_height="wrap_content"
             android:text="Popular Movie" />
 
+        <Button
+            android:id="@+id/bt_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Info" />
+
 
     </LinearLayout>
 
 
-    <RelativeLayout
+   <!-- <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -93,7 +111,7 @@
             android:text="Movie Details" />
 
 
-    </RelativeLayout>
+    </RelativeLayout>-->
 
     <!--app:layout_constraintBottom_toBottomOf="parent"-->
     <!--app:layout_constraintLeft_toLeftOf="parent"-->

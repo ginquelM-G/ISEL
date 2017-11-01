@@ -1,5 +1,6 @@
 package pt.isel.pdm.tmdb.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
@@ -19,7 +20,7 @@ class ResultsActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main_results)
+        setContentView(R.layout.generic_results)
 
         val movieName: String = intent?.getStringExtra("MOVIE_NAME")?:"empty"
         val movieNP: String = intent?.getStringExtra("MOVIE_NOW_PLAYING")?:"empty"
@@ -34,7 +35,7 @@ class ResultsActivity: AppCompatActivity() {
             dbCLient.movieUpcoming(application, {movieItens -> callBack(movieItens)})
 
         }else if("moviePopular".equals(moviePop)){
-            dbCLient.moviePopular(application, {movieItens -> callBack(movieItens)})
+            dbCLient.moviePopular(application, {movieItens -> callBackTOPopularMovies(movieItens)})
         }else if(-1 != movieDetails ){
             //dbCLient.movieDetails(movieDetails, application, {movieItens -> callBack(movieItens)})
         }
@@ -62,6 +63,20 @@ class ResultsActivity: AppCompatActivity() {
             listOfItem.setOnItemClickListener { parent, view, position, ld ->
                 Toast.makeText(this, movieItems.toString(), Toast.LENGTH_SHORT).show()
             }
+    }
+
+
+    fun callBackTOPopularMovies(movieItems: Array<MovieSearchItem>){
+        var adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, movieItems)
+        listOfItem.adapter = adapter
+        listOfItem.setOnItemClickListener { parent, view, position, ld ->
+            Toast.makeText(this, movieItems[position].toString(), Toast.LENGTH_SHORT).show()
+            var intent = Intent(this, ResultsOfMovieDetails::class.java)
+            intent.putExtra("MOVIE_DETAILS", movieItems[position].id)
+
+            startActivity(intent)
+            //edTxt_idDoFilme?.setText("")
+        }
     }
 
 }
