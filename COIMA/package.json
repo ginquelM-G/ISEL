@@ -11,6 +11,7 @@
   "dependencies": {
     "fs": "0.0.1-security",
     "handlebars": "^4.0.11",
-    "request": "2.83.0"
+    "request": "2.83.0",
+    "sync-request": "^4.1.0"
   }
 }
