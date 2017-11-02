@@ -8,9 +8,6 @@ const movieCredits = require('./model/CreditsDto')
 
 var details =[];
 
-//getLeagueLeader(445)
-// sleepFor(2000)
-
 
 //getMoviesByName('Batman', () =>{})
 
@@ -39,18 +36,8 @@ function getMoviesDetails(movieId, cb){
     req(URI, (err, resp, data) =>{
         if(err) return cb(err)
         
-        
-        //details1 = getMoviesCredits(movieId)
-        //const credits = new movieCredits(movieDetailsAux)
-        //console.log('id: '+movieDetails.id + '\nTitle: ' + movieDetails.title)
         console.log(`URI: ${URI}`)
-        //console.log(":::: "+ details1.toString())
-        
         const dt = JSON.parse(data.toString())
-    
-        //const movieDetail = new movieDetails(dt.id, dt.original_title, dt.overview, dt.poster_path, details1)
-
-       // console.log(" \n\nPPPPPPP "+movieDetail.details)
         cb(null, dt)
     })
 
@@ -61,22 +48,15 @@ function getMoviesDetails(movieId, cb){
 // 3. https://api.themoviedb.org/3/movie/860/credits?api_key=*****
 function getMoviesCredits(movieId,cb){
     const URI = `https://api.themoviedb.org/3/movie/${movieId}/credits?api_key=${API_KEY}`;
-/**  const resp = reqS('GET', URI)
-    const movieCreditsJson = JSON.parse(resp.getBody().toString())
-    details = movieCredits(movieCreditsJson)
-    console.log(`URI: ${URI}`)
-    console.log(details.toString())
- */
+
     req(URI, (err, resp, data) =>{
         if(err) return cb(err)
         const movieCreditsJson = JSON.parse(data.toString())
         credits = movieCredits(movieCreditsJson)
         console.log(`URI: ${URI}`)
-        console.log(credits.toString)
-       // cb(null, movieCredits)
+        cb(null, movieCredits)
     })
-    
-    return details
+   // return details
 }
 
 
@@ -108,16 +88,3 @@ function getPersonDetails(actorId, cb){
         cb(null, movieCredits)
     })
 }
-/** 
-function getMoviesByNameCb(err, resp, data){
-    if(err) throw err
-    const movie = JSON.parse(data.toString())
-    console.log(movie.results[0])
-}
-
-
-function sleepFor( sleepDuration ){
-    var now = new Date().getTime();
-    //while(new Date().getTime() < now + sleepDuration){  } 
-}
-*/

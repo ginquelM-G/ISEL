@@ -30,10 +30,11 @@ const routes = {
 	 'actorById':{
 		action: service.getMoviesByName,
 		view: view('./views/actorView.hbs')
-
 	}
-
 }
+
+
+
 
 function router(req, resp){
 	const urlObj = url.parse(req.url, true)
@@ -50,13 +51,11 @@ function router(req, resp){
 		//console.log(movieId[2])
 		action = cb => service.getMoviesDetails(movieId[2], cb)
 	}
-
 /*	if(movies == urlObj.pathname && urlObj.query!= undefined){
 		console.log("3. Lista de personagens de um filme")
 	}*/
 	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
 		 var movieId = urlObj.pathname.toString().split('/')
-		 console.log("SSSSSSSSSSS" + movieId[2])
 		 action = cb => service.getPersonMovieDetails(movieId[2], cb)
 	}
 /*
@@ -73,18 +72,6 @@ function router(req, resp){
 				console.log("ERROR: "+err.message)
 				//throw err
 			}else{
-			    //actionCallBack()
-				//const view = routes['serchMovies'].view
-				//var html = view(obj.results)
-
-				//const view = routes['movieById'].view
-				//var html = view(obj)
-
-				//const view = routes['actorById'].view
-				//var html = view(obj)
-
-				//console.log("\n\n\n\n" + obj.cast[0].toString())
-				//data = html
 				data = actionCallBack(urlObj, obj, data)
 				//data = view(obj)
 	 			resp.statusCode = 200
@@ -99,30 +86,27 @@ function router(req, resp){
 		resp.statusCode = 404 // Resource Not Found
 		resp.end()
 	}
-	//resp.end()
 
 }
+
+
+
 
 function actionCallBack(urlObj, obj,  data){		
 	let view
 	let html		
 	if(movies == urlObj.pathname || urlObj.query.name != undefined){
 		console.log('1. Pesquisa')        
-		view = routes['serchMovies'].view
-		html = view(obj)		
+		view = routes['serchMovies'].view			
 	}
-	if(listOfmovie == urlObj.pathname || urlObj.pathname.match(listOfmovie)){ 
+	else if(listOfmovie == urlObj.pathname || urlObj.pathname.match(listOfmovie)){ 
 		console.log("2. Detalhes de um filme")
-		 view = routes['movieById'].view
-		 html = view(obj)
+		view = routes['movieById'].view
 	}
-/*	if(movies == urlObj.pathname && urlObj.query!= undefined){
-		console.log("3. Lista de personagens de um filme")
-	}*/
-	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
+	else if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
 		 view = routes['actorById'].view
-		 html = view(obj)
 	}
+	html = view(obj)
 	data = html
 	return data
 }
