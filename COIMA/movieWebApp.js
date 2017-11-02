@@ -1,6 +1,8 @@
 const http = require('http')
 const url =  require('url')
 const service = require('./movieService')
+const fs = require('fs')
+const hbs = require('handlebars')
 const port = 3010
 
 
@@ -13,6 +15,15 @@ const movies = '/movies' // query-string ?name=..
 const listOfmovie = '/movies\/[0-9]+'
 const listOfPerson = '/movies\/[0-9]+/'
 const actors = '/actors\/[0-9]+' 
+
+const routes = {
+    'movies':{
+        action: service.getMoviesByName,
+        view: view('./views/moviesView.hbs')
+
+    }
+
+}
 
 function router(req, resp){
     const urlObj = url.parse(req.url, true)
@@ -51,7 +62,13 @@ function router(req, resp){
                 console.log("ERROR: "+err.message)
                 //throw err
             }else{
-                data = html(obj)
+                //data = html(obj)
+                //data = JSON.stringify(obj)
+                const vieww = routes['movies'].view
+                var html = vieww(obj.results)
+                console.log("\n\n\n\n" + obj.toString)
+                data = html
+                //data = view(obj)
                 resp.statusCode = 200
             }
             resp.setHeader('Content-Type', 'text/html')
@@ -69,7 +86,7 @@ function router(req, resp){
 }
 
 
-
+/*
 function html(obj){
     let str = ''
     for(let prop in obj){
@@ -77,4 +94,11 @@ function html(obj){
         str += `<li>${prop}:  ${val}</li>`
     }
     return `<ul>${str}</ul>`
+}
+*/
+
+
+function view(viewPath) {
+    const viewSrc = fs.readFileSync(viewPath).toString()
+    return hbs.compile(viewSrc)
 }
