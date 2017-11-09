@@ -28,7 +28,7 @@ const routes = {
 
 	},
 	 'actorById':{
-		action: service.getMoviesByName,
+		action: service.getPersonDetails,
 		view: view('./views/actorView.hbs')
 	}
 }
@@ -56,7 +56,7 @@ function router(req, resp){
 	}*/
 	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
 		 var movieId = urlObj.pathname.toString().split('/')
-		 action = cb => service.getPersonMovieDetails(movieId[2], cb)
+		 action = cb => service.getPersonDetails(movieId[2], cb)
 	}
 /*
 	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
@@ -72,6 +72,7 @@ function router(req, resp){
 				console.log("ERROR: "+err.message)
 				//throw err
 			}else{
+				console.log("\n\n "+ obj.results)
 				data = actionCallBack(urlObj, obj, data)
 				//data = view(obj)
 	 			resp.statusCode = 200
@@ -96,16 +97,20 @@ function actionCallBack(urlObj, obj,  data){
 	let view
 	let html		
 	if(movies == urlObj.pathname || urlObj.query.name != undefined){
-		console.log('1. Pesquisa')        
+		console.log('1. Pesquisa [actionCallBack]')        
 		view = routes['serchMovies'].view			
 	}
 	else if(listOfmovie == urlObj.pathname || urlObj.pathname.match(listOfmovie)){ 
-		console.log("2. Detalhes de um filme")
+		console.log("2. Detalhes de um filme [actionCallBack]")
 		view = routes['movieById'].view
 	}
 	else if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
+		 console.log("3. Actor Details [actionCallBack]")
 		 view = routes['actorById'].view
+		 //console.log("\n\nOBJ" + obj.cast[0]. +"OBJ END")
+		 // console.log("\n\npersonAndMovieDetails.cast: "+ obj.cast[0].title)
 	}
+	
 	html = view(obj)
 	data = html
 	return data

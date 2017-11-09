@@ -9,9 +9,29 @@
        
         <ul>
             <li>Id: {{id}}</li>
-            <li>Title: {{title}}</li>
-            <li>Vote Average: {{vote_average}}</li>
-            <li>Overview: {{overview}}</li>        
+            <li>Title: {{original_title}}</li>
+            <li>Overview: {{overview}}</li>  
+            <li>Director: {{director}}</p></li>      
         </ul>
+
+
+        {{!--<p><b>Director:</b> {{director}}</p>--}}
+        <table>
+            <tr>
+                <th>Character</th>
+                <th>Name</th>
+            </tr>
+        {{#each cast}}
+                <tr>
+                    <td>{{character}}</td>
+                    <td>
+                        <a href='/../actors/{{id}}'>
+                        {{name}}
+                        </a>
+                    </td>
+
+                </tr>
+            {{/each}}
+        </table>
     </body>
 </html>

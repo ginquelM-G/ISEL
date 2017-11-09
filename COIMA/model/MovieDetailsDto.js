@@ -7,18 +7,21 @@ const cred = require('./CreditsDto')
 
 /** Precisa ser feito agregação ou composição */
 
-function MovieDetails(id, originalTitle, overview, poster_path, castS){
-console.log("MOOVEI_DEYAILS")
-    this.id = id
-    this.original_title =originalTitle
-    this.overview = overview
-    this.poster_path = poster_path
-    this.cast = [];
+//function MovieDetails(id, originalTitle, overview, poster_path){
+function MovieDetails(jsonData){
+    this.id = jsonData.id
+    this.original_title = jsonData.original_title
+    this.overview = jsonData.overview
+    this.poster_path = jsonData.poster_path
+    //this.cast = [];
 
-    console.log("HELL "+castS[0].name.toString())
+    console.log("MOVIE_DEYAILS\n "+ this.id+ "\n\n"+ this.original_title)
 
-    castS.forEach(function(element, indice, array) {
+    //console.log("HELL "+castS[0].name.toString())
+
+ /*  castS.forEach(function(element, indice, array) {
         this.cast[indice] = castS
     }, this);
+    */
 
 }
