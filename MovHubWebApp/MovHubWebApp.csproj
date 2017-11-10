@@ -64,6 +64,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HtmlEmit\HtmlEmit.csproj">
+      <Project>{fe5bad1a-0c2a-4457-9889-f1565cd221ee}</Project>
+      <Name>HtmlEmit</Name>
+    </ProjectReference>
     <ProjectReference Include="..\HtmlReflect\HtmlReflect.csproj">
       <Project>{5ab8c0a0-a449-4c34-af67-4899236a8add}</Project>
       <Name>HtmlReflect</Name>
@@ -74,4 +78,8 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>

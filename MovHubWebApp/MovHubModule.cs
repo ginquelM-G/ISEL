@@ -1,4 +1,5 @@
 ﻿using HtmlReflect;
+using HtmlEmit;
 using Nancy;
 using MovHubDb;
 using System;
@@ -10,7 +11,7 @@ namespace MovHubWebApp
     {
         TheMovieDbClient movieDb = new TheMovieDbClient();
         Htmlect html = new Htmlect();
-
+        Emitter em = new Emitter();
         public MovHubModule()
         {
             Get["/movies"] = args =>
@@ -27,7 +28,7 @@ namespace MovHubWebApp
                 Movie mov = movieDb.MovieDetails(args.movieId);
                 MovHubViewModel model = new MovHubViewModel(
                     "Movie Details:",
-                    html.ToHtml(mov));
+                    em.ToHtml(mov));
                 return View["ViewDetails", model];
             };
 

@@ -1,0 +1,5 @@
+C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlEmit\bin\Debug\HtmlEmit.dll
+C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlEmit\bin\Debug\HtmlEmit.pdb
+C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlEmit\obj\Debug\HtmlEmit.csproj.CoreCompileInputs.cache
+C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlEmit\obj\Debug\HtmlEmit.dll
+C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlEmit\obj\Debug\HtmlEmit.pdb
