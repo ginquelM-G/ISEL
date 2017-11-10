@@ -1,5 +1,0 @@
-C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlReflect\bin\Debug\HtmlReflect.dll
-C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlReflect\bin\Debug\HtmlReflect.pdb
-C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlReflect\obj\Debug\HtmlReflect.csproj.CoreCompileInputs.cache
-C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlReflect\obj\Debug\HtmlReflect.dll
-C:\Users\Dani\Desktop\isel\cont\AVE\repos\LI51N-G03\HtmlReflect\obj\Debug\HtmlReflect.pdb
