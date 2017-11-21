@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovHubWebApp", "MovHubWebApp\MovHubWebApp.csproj", "{B6672F31-017C-45C2-A85B-7BAFE0075700}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlReflect", "HtmlReflect\HtmlReflect.csproj", "{5AB8C0A0-A449-4C34-AF67-4899236A8ADD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlReflectTest", "HtmlReflectTest\HtmlReflectTest.csproj", "{C3D07A3E-E4EA-41B2-98CB-09AF5E93C3DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlEmit", "HtmlEmit\HtmlEmit.csproj", "{FE5BAD1A-0C2A-4457-9889-F1565CD221EE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5AB8C0A0-A449-4C34-AF67-4899236A8ADD} = {5AB8C0A0-A449-4C34-AF67-4899236A8ADD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +38,10 @@ Global
 		{C3D07A3E-E4EA-41B2-98CB-09AF5E93C3DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3D07A3E-E4EA-41B2-98CB-09AF5E93C3DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3D07A3E-E4EA-41B2-98CB-09AF5E93C3DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE5BAD1A-0C2A-4457-9889-F1565CD221EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE5BAD1A-0C2A-4457-9889-F1565CD221EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE5BAD1A-0C2A-4457-9889-F1565CD221EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE5BAD1A-0C2A-4457-9889-F1565CD221EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
