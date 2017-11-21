@@ -21,9 +21,9 @@ namespace HtmlEmit
             string template = "<li class='list-group-item'><strong>{0}</strong>: {1}</li>";
             return String.Format(template, name, val.ToString());
         }
-        public static string Format(string name, object[] arr)
+        public static string Format(object[] arr)
         {
-            string str = name + ": [";
+            string str = "";
             for (int i = 0; i < arr.Length; i++)
             {
                 str += Emitter.ObjFieldsToString(arr[i]);
@@ -39,6 +39,7 @@ namespace HtmlEmit
     public class Emitter
     {
         static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object), typeof(string) });
+        static readonly MethodInfo formatterForArray = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(object[]) });
         static readonly MethodInfo concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
 
         static Dictionary<Type, IHtml> cachedTypes = new Dictionary<Type, IHtml>();
@@ -138,7 +139,15 @@ namespace HtmlEmit
             }
             else
             {
-                il.Emit(OpCodes.Ldstr, "Array");
+                LocalBuilder target = il.DeclareLocal(klass);
+                il.Emit(OpCodes.Ldarg_1);          // push target
+                il.Emit(OpCodes.Castclass, klass); // castclass
+                il.Emit(OpCodes.Stloc, target);    // store on local variable 
+
+                il.Emit(OpCodes.Ldstr, "");
+                il.Emit(OpCodes.Ldloc_0);
+                il.Emit(OpCodes.Call, formatterForArray);
+                il.Emit(OpCodes.Call, concat);
             }
             il.Emit(OpCodes.Ret);              // ret
 
