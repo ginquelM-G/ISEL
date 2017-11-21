@@ -20,7 +20,7 @@ namespace MovHubWebApp
                 MovieSearchItem[] moviesList = movieDb.Search(title, 1);
                 MovHubViewModel model = new MovHubViewModel(
                     "Movies for title: " + title,
-                    html.ToHtml(moviesList));
+                    em.ToHtml(moviesList));
                 return View["ViewTable", model];
             };
             Get["/movies/{movieId}"] = args =>
@@ -37,7 +37,7 @@ namespace MovHubWebApp
                 CreditsItem[] credits = movieDb.MovieCredits(args.movieId);
                 MovHubViewModel model = new MovHubViewModel(
                     "Cast and Crew:",
-                    html.ToHtml(credits));
+                    em.ToHtml(credits));
                 return View["ViewTable", model];
             };
 
@@ -46,8 +46,8 @@ namespace MovHubWebApp
                 Person actor = movieDb.PersonDetais(args.actorId);
                 MovieSearchItem[] credits = movieDb.PersonMovies(args.actorId);
                 MovHubViewModel moviesList = new MovHubViewModel(
-                    html.ToHtml(actor),
-                    html.ToHtml(credits));
+                    em.ToHtml(actor),
+                    em.ToHtml(credits));
                 return View["ViewTable", moviesList];
             };
 

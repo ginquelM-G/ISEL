@@ -1,55 +1,44 @@
-﻿using System;
+﻿using HtmlReflect;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace HtmlEmit
 {
-    public class HtmlIgnoreAttribute : Attribute
-    {
-
-    }
-
-    public class HtmlAsAttribute : Attribute
-    {
-        public HtmlAsAttribute(string html)
-        {
-            Html = html;
-        }
-
-        public string Html { get; private set; }
-    }
-
-
+   
     interface IHtml
     {
         string Html(object target);
+
     }
 
     public abstract class AbstractHtml : IHtml
     {
-        public static string Format(string name, object val)
+        public static string Format(string name, object val, string format)
         {
+            if (format != null) return format.Replace("{name}", name).Replace("{value}", val.ToString());
             string template = "<li class='list-group-item'><strong>{0}</strong>: {1}</li>";
-            return String.Format(template, name, val);
+            return String.Format(template, name, val.ToString());
         }
         public static string Format(string name, object[] arr)
         {
             string str = name + ": [";
             for (int i = 0; i < arr.Length; i++)
             {
-                //str += Emitter.ObjFieldsToString(arr[i], "<td>{0}</td>") + ", ";
+                str += Emitter.ObjFieldsToString(arr[i]);
             }
             return str + "]";
         }
 
         public abstract string Html(object target);
+        
     }
 
 
     public class Emitter
     {
-        static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object) });
+        static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object), typeof(string) });
         static readonly MethodInfo concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
 
         static Dictionary<Type, IHtml> cachedTypes = new Dictionary<Type, IHtml>();
@@ -89,41 +78,71 @@ namespace HtmlEmit
 
             ILGenerator il = methodBuilder.GetILGenerator();
             PropertyInfo[] ps = klass.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            LocalBuilder target = il.DeclareLocal(klass);
-            il.Emit(OpCodes.Ldarg_1);          // push target
-            il.Emit(OpCodes.Castclass, klass); // castclass
-            il.Emit(OpCodes.Stloc, target);    // store on local variable 
             
-            il.Emit(OpCodes.Ldstr, ""); //str
-            foreach (PropertyInfo p in ps)
+            if(!klass.IsArray)
             {
-                if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
-                object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
-                if (attr == null)
+                il.Emit(OpCodes.Ldstr, ""); //str
+                foreach (PropertyInfo p in ps)
                 {
-                    //noncacheableattr
-                    //str+=format(p.Name, p.GetValue(target))
+                    if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
+                    object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
+                    if (attr == null)
+                    {
+                        //string
 
-                    il.Emit(OpCodes.Ldstr, p.Name);
-                    il.Emit(OpCodes.Ldloc, target);    // ldloc target
-                    //il.Emit(OpCodes.Ldstr, "propriedade normal");
-                    //il.Emit(OpCodes.Callvirt, klass.GetProperty(p.Name, BindingFlags.Instance | BindingFlags.Public).GetGetMethod(true));
-                    il.Emit(OpCodes.Call, formatterForObject);
-                } else
-                {
-                    //link
-                    /*string html = ((HtmlAsAttribute)attr).Html;
-                    html.Replace("{name}", p.Name).Replace("{value}", p.GetValue(target).ToString());
-                    il.Emit(OpCodes.Ldstr, html);*/
-                    il.Emit(OpCodes.Ldstr, "custom attr");
-                    il.Emit(OpCodes.Ldloc, target);    // ldloc target
-                    il.Emit(OpCodes.Call, formatterForObject);
+                        il.Emit(OpCodes.Ldstr, p.Name);
+                        il.Emit(OpCodes.Ldarg_1);
+                        if (klass.IsValueType)
+                            il.Emit(OpCodes.Unbox, klass);
+                        else il.Emit(OpCodes.Castclass, klass);
+
+                        Type returnType = null;
+                        var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
+                        var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
+                        il.Emit(opCode, targetGetMethod);
+                        returnType = targetGetMethod.ReturnType;
+
+                        if (returnType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, returnType);
+                        }
+                        il.Emit(OpCodes.Ldnull);
+                        il.Emit(OpCodes.Call, formatterForObject);
+                    }
+                    else
+                    {
+                        il.Emit(OpCodes.Ldstr, p.Name);
+                        //link
+                        string html = ((HtmlAsAttribute)attr).Html;
+
+                        il.Emit(OpCodes.Ldarg_1);
+                        if (klass.IsValueType)
+                            il.Emit(OpCodes.Unbox, klass);
+                        else il.Emit(OpCodes.Castclass, klass);
+
+                        Type returnType = null;
+                        var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
+                        var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
+                        il.Emit(opCode, targetGetMethod);
+                        returnType = targetGetMethod.ReturnType;
+
+                        if (returnType.IsValueType)
+                        {
+                            il.Emit(OpCodes.Box, returnType);
+                        }
+                        il.Emit(OpCodes.Ldstr, html);
+                        il.Emit(OpCodes.Call, formatterForObject);
+                    }
+                    il.Emit(OpCodes.Call, concat);
                 }
-                il.Emit(OpCodes.Call, concat);
+            }
+            else
+            {
+                il.Emit(OpCodes.Ldstr, "Array");
             }
             il.Emit(OpCodes.Ret);              // ret
-        
+
+            //check if dll already exits
 
             Type t = tb.CreateType();
             ab.Save(aName.Name + ".dll");
@@ -139,31 +158,8 @@ namespace HtmlEmit
         public string ToHtml(object[] arr)
         {
 
-            string table = "<table class='table table-hover'>";
-            string thead = "<thead>";
-            string tbody = "<tbody>";
-            bool first = true;
-
-            foreach (object o in arr)
-            {
-                Type t = o.GetType();
-                //string td = "<td>{0}</td>";
-                string th = "<th>{0}</th>";
-
-                if (first)
-                {
-                    thead += "<tr>";
-                    foreach (PropertyInfo p in t.GetProperties())
-                    {
-                        thead += String.Format(th, p.Name);
-                    }
-                    thead += "</tr></thead>";
-                    first = false;
-                }
-
-                //tbody += "<tr>" + Cache.CacheableArrToString(o, td) + "</tr>";
-            }
-            return table + thead + tbody + "</tbody>" + "</table>";
+            string table = "<table class='table table-hover'>{0}</table>";
+            return String.Format(table, ObjFieldsToString(arr));
         }
     }
 }

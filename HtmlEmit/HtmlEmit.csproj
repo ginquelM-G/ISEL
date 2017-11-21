@@ -43,6 +43,12 @@
     <Compile Include="Emitter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HtmlReflect\HtmlReflect.csproj">
+      <Project>{5ab8c0a0-a449-4c34-af67-4899236a8add}</Project>
+      <Name>HtmlReflect</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

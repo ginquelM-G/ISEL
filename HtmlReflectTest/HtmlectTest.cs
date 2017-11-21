@@ -24,7 +24,7 @@ namespace HtmlReflectTest
                 "<li class='list-group-item'>" +
                 "<strong>ReleaseDate</strong>: 2011-08-06</li>" + 
                 "<li class='list-group-item'>" +
-                "<strong>VoteAverage</strong>: 7,4</li></ul>";
+                "<strong>VoteAverage</strong>: 7,5</li></ul>";
             Assert.AreEqual(expected, htmlatual);
 
         }
@@ -42,7 +42,7 @@ namespace HtmlReflectTest
                 "<tr><th>Id</th><th>Title</th><th>ReleaseDate</th><th>VoteAverage</th></tr>" +
                 "</thead>" +
                 "<tbody>" +
-                "<tr><td><a href='/movies/64690'>64690</a></td><td>Drive</td><td>2011-08-06</td><td>7,4</td></tr>" +
+                "<tr><td><a href='/movies/64690'>64690</a></td><td>Drive</td><td>2011-08-06</td><td>7,5</td></tr>" +
                 "</tbody></table>";
             Assert.AreEqual(expected, htmlatual);
         }
@@ -78,7 +78,7 @@ namespace HtmlReflectTest
             Assert.AreEqual(64690, res.Id);
             Assert.AreEqual("Drive", res.Title);
             Assert.AreEqual("2011-08-06", res.ReleaseDate);
-            Assert.AreEqual(7.4, res.VoteAverage);
+            Assert.AreEqual(7.5, res.VoteAverage);
         }
 
         [TestMethod]
@@ -117,9 +117,9 @@ namespace HtmlReflectTest
         {
             TheMovieDbClient client = new TheMovieDbClient();
             MovieSearchItem res = client.PersonMovies(15008)[1];
-            Assert.AreEqual("Jam Session", res.Title);
-            Assert.AreEqual("1944-04-13", res.ReleaseDate);
-            Assert.AreEqual(6, res.VoteAverage);
+            Assert.AreEqual("On the Town", res.Title);
+            Assert.AreEqual("1949-12-08", res.ReleaseDate);
+            Assert.AreEqual(6.9, res.VoteAverage);
         }
 
     }
