@@ -9,7 +9,6 @@ namespace HtmlEmit
     interface IHtml
     {
         string Html(object target);
-
     }
 
     public abstract class AbstractHtml : IHtml
@@ -30,7 +29,7 @@ namespace HtmlEmit
             string str = "[";
             for (int i = 0; i < arr.Length; i++)
             {
-                str += Emitter.ObjFieldsToString(arr[i]);
+                str += Emitter.ObjPropsToString(arr[i]);
             }
             return str + "]";
         }
@@ -48,7 +47,7 @@ namespace HtmlEmit
         static readonly MethodInfo concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
 
         static Dictionary<Type, IHtml> cachedTypes = new Dictionary<Type, IHtml>();
-        internal static string ObjFieldsToString(object obj)
+        internal static string ObjPropsToString(object obj)
         {
             IHtml objHtml;
             Type klass = obj.GetType();
@@ -92,48 +91,31 @@ namespace HtmlEmit
                 {
                     if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
                     object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
+                    il.Emit(OpCodes.Ldstr, p.Name);
+                    il.Emit(OpCodes.Ldarg_1);
+                    if (klass.IsValueType)
+                        il.Emit(OpCodes.Unbox, klass);
+                    else il.Emit(OpCodes.Castclass, klass);
+
+                    Type returnType = null;
+                    var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
+                    var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
+                    il.Emit(opCode, targetGetMethod);
+                    returnType = targetGetMethod.ReturnType;
+
+                    if (returnType.IsValueType)
+                    {
+                        il.Emit(OpCodes.Box, returnType);
+                    }
                     if (attr == null)
                     {
                         //string
-
-                        il.Emit(OpCodes.Ldstr, p.Name);
-                        il.Emit(OpCodes.Ldarg_1);
-                        if (klass.IsValueType)
-                            il.Emit(OpCodes.Unbox, klass);
-                        else il.Emit(OpCodes.Castclass, klass);
-
-                        Type returnType = null;
-                        var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
-                        var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
-                        il.Emit(opCode, targetGetMethod);
-                        returnType = targetGetMethod.ReturnType;
-
-                        if (returnType.IsValueType)
-                        {
-                            il.Emit(OpCodes.Box, returnType);
-                        }
                         il.Emit(OpCodes.Call, formatterForObject);
                     }
                     else
                     {
-                        il.Emit(OpCodes.Ldstr, p.Name);
+                        // attr
                         string html = ((HtmlAsAttribute)attr).Html;
-
-                        il.Emit(OpCodes.Ldarg_1);
-                        if (klass.IsValueType)
-                            il.Emit(OpCodes.Unbox, klass);
-                        else il.Emit(OpCodes.Castclass, klass);
-
-                        Type returnType = null;
-                        var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
-                        var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
-                        il.Emit(opCode, targetGetMethod);
-                        returnType = targetGetMethod.ReturnType;
-
-                        if (returnType.IsValueType)
-                        {
-                            il.Emit(OpCodes.Box, returnType);
-                        }
                         il.Emit(OpCodes.Ldstr, html);
                         il.Emit(OpCodes.Call, formatterForAttr);
                     }
@@ -142,6 +124,7 @@ namespace HtmlEmit
             }
             else
             {
+                // array
                 LocalBuilder target = il.DeclareLocal(klass);
                 il.Emit(OpCodes.Ldarg_1);          // push target
                 il.Emit(OpCodes.Castclass, klass); // castclass
@@ -164,14 +147,14 @@ namespace HtmlEmit
         public string ToHtml(object obj)
         {
             string template = "<ul class='list-group'>{0}</ul>";
-            return String.Format(template, ObjFieldsToString(obj));
+            return String.Format(template, ObjPropsToString(obj));
         }
 
         public string ToHtml(object[] arr)
         {
 
             string table = "<table class='table table-hover'>{0}</table>";
-            return String.Format(table, ObjFieldsToString(arr));
+            return String.Format(table, ObjPropsToString(arr));
         }
     }
 }
