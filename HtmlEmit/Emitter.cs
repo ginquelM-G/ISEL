@@ -6,7 +6,6 @@ using System.Reflection.Emit;
 
 namespace HtmlEmit
 {
-   
     interface IHtml
     {
         string Html(object target);
@@ -15,15 +14,20 @@ namespace HtmlEmit
 
     public abstract class AbstractHtml : IHtml
     {
+        public static string Format(string name, object val)
+        {
+            string template = "<li class='list-group-item'><strong>{0}</strong>: {1}</li>";
+            return String.Format(template, name, val != null ? val.ToString() : "");
+        }
+
         public static string Format(string name, object val, string format)
         {
-            if (format != null) return format.Replace("{name}", name).Replace("{value}", val.ToString());
-            string template = "<li class='list-group-item'><strong>{0}</strong>: {1}</li>";
-            return String.Format(template, name, val.ToString());
+            return format.Replace("{name}", name).Replace("{value}", val.ToString());
         }
+
         public static string Format(object[] arr)
         {
-            string str = "";
+            string str = "[";
             for (int i = 0; i < arr.Length; i++)
             {
                 str += Emitter.ObjFieldsToString(arr[i]);
@@ -38,21 +42,22 @@ namespace HtmlEmit
 
     public class Emitter
     {
-        static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object), typeof(string) });
+        static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object) });
+        static readonly MethodInfo formatterForAttr = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object), typeof(string) });
         static readonly MethodInfo formatterForArray = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(object[]) });
         static readonly MethodInfo concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
 
         static Dictionary<Type, IHtml> cachedTypes = new Dictionary<Type, IHtml>();
         internal static string ObjFieldsToString(object obj)
         {
-            IHtml logger;
+            IHtml objHtml;
             Type klass = obj.GetType();
-            if (!cachedTypes.TryGetValue(klass, out logger))
+            if (!cachedTypes.TryGetValue(klass, out objHtml))
             {
-                logger = EmitHtml(klass);
-                cachedTypes.Add(klass, logger);
+                objHtml = EmitHtml(klass);
+                cachedTypes.Add(klass, objHtml);
             }
-            return logger.Html(obj);
+            return objHtml.Html(obj);
         }
 
         private static IHtml EmitHtml(Type klass)
@@ -107,13 +112,11 @@ namespace HtmlEmit
                         {
                             il.Emit(OpCodes.Box, returnType);
                         }
-                        il.Emit(OpCodes.Ldnull);
                         il.Emit(OpCodes.Call, formatterForObject);
                     }
                     else
                     {
                         il.Emit(OpCodes.Ldstr, p.Name);
-                        //link
                         string html = ((HtmlAsAttribute)attr).Html;
 
                         il.Emit(OpCodes.Ldarg_1);
@@ -132,7 +135,7 @@ namespace HtmlEmit
                             il.Emit(OpCodes.Box, returnType);
                         }
                         il.Emit(OpCodes.Ldstr, html);
-                        il.Emit(OpCodes.Call, formatterForObject);
+                        il.Emit(OpCodes.Call, formatterForAttr);
                     }
                     il.Emit(OpCodes.Call, concat);
                 }
