@@ -26,12 +26,32 @@ namespace HtmlEmit
 
         public static string Format(object[] arr)
         {
-            string str = "[";
+            string str = "<tbody>";
+            string head = "<thead>";
+            bool first = true;
             for (int i = 0; i < arr.Length; i++)
             {
-                str += Emitter.ObjPropsToString(arr[i]);
+                head += "<tr>"; str += "<tr>";
+                foreach (PropertyInfo p in arr[i].GetType().GetProperties())
+                {
+                    if(p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
+                    object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute));
+                    if (attr != null)
+                    {
+                        string html = ((HtmlAsAttribute)attr).Html;
+                        str += String.Format("<td>{0}</td>", Format("", p.GetValue(arr[i]), html));
+                    } else
+                    {
+                        object val = p.GetValue(arr[i]);
+                        str += String.Format("<td>{0}</td>", val == null ? "" : val.ToString());
+                    }
+                    if (first) head += String.Format("<th>{0}</th>", p.Name);
+                }
+                first = false;
+                //str += "<tr>" + Emitter.ObjPropsToString(arr[i]) + "</tr>";
+                str += "</tr>";
             }
-            return str + "]";
+            return head + "</th></thead>" + str + "</tbody>";
         }
 
         public abstract string Html(object target);
@@ -136,9 +156,7 @@ namespace HtmlEmit
                 il.Emit(OpCodes.Call, concat);
             }
             il.Emit(OpCodes.Ret);              // ret
-
-            //check if dll already exits
-
+            
             Type t = tb.CreateType();
             ab.Save(aName.Name + ".dll");
             return (IHtml)Activator.CreateInstance(t);
