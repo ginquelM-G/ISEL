@@ -14,7 +14,7 @@ namespace Benchmarking
         {
             long timeEmit = NBench.Bench(BenchEmit, "Emit");
             long timeReflect = NBench.Bench(BenchReflect, "Reflect");
-            Console.WriteLine("Emit: {0}\n Reflect: {1}", timeEmit, timeReflect);
+            Console.WriteLine("Emit: {0}\nReflect: {1}", timeEmit, timeReflect);
             Assert.IsTrue(timeEmit < timeReflect);
         }
 

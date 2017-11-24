@@ -111,22 +111,16 @@ namespace HtmlEmit
                 {
                     if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
                     object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
+
                     il.Emit(OpCodes.Ldstr, p.Name);
                     il.Emit(OpCodes.Ldarg_1);
-                    if (klass.IsValueType)
-                        il.Emit(OpCodes.Unbox, klass);
+                    if (klass.IsValueType) il.Emit(OpCodes.Unbox, klass);
                     else il.Emit(OpCodes.Castclass, klass);
 
-                    Type returnType = null;
                     var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
                     var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
                     il.Emit(opCode, targetGetMethod);
-                    returnType = targetGetMethod.ReturnType;
 
-                    if (returnType.IsValueType)
-                    {
-                        il.Emit(OpCodes.Box, returnType);
-                    }
                     if (attr == null)
                     {
                         //string
