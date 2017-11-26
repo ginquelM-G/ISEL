@@ -9,8 +9,8 @@ namespace MovHubDb.Model
         [HtmlIgnore] public int Id { get; set; }
         [JsonProperty("original_title")]
         public string OriginalTitle { get; set; }
+        public string Tagline { get; set; }
         [HtmlAs("<li class='list-group-item'><a href='/movies/{value}/credits'>Cast and crew </a></li>")]
-        //public string Tagline { get; set; }
         public string Credits { get { return Id.ToString(); } }
         [HtmlIgnore] public long Budget { get; set; }
         public double Popularity { get; set; }
