@@ -21,6 +21,7 @@ namespace HtmlEmit
 
         public static string FormatAttr(string name, object val, string format)
         {
+            if (val == null) return "";
             return format.Replace("{name}", name).Replace("{value}", val.ToString());
         }
 
@@ -151,10 +152,9 @@ namespace HtmlEmit
         public string ToHtml(object[] arr)
         {
             string table = "<table class='table table-hover'>{0}{1}</table>";
-            string thead = "<thead><tr>{0}</tr></thead>";
+            string thead = ConstructTableHead(arr[0].GetType());
             string tr = "<tr>{0}</tr>";
 
-            thead = String.Format(thead, ConstructColumns(arr.GetType().GetElementType()));
             string tbody = "<tbody>";
             IHtml emit = ObjPropsToString(arr);
             foreach (object o in arr)
@@ -165,9 +165,9 @@ namespace HtmlEmit
             return String.Format(table, thead, tbody);
         }
 
-        private object ConstructColumns(Type type)
+        private string ConstructTableHead(Type type)
         {
-            string str = "";
+            string str = "<thead><tr>";
             string th = "<th>{0}</th>";
 
             foreach (PropertyInfo p in type.GetProperties())
@@ -175,7 +175,7 @@ namespace HtmlEmit
                 if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
                 str += String.Format(th, p.Name);
             }
-            return str;
+            return str + "</tr></thead>";
         }
     }
 }
