@@ -47,7 +47,7 @@ namespace MovHubWebApp
                 MovieSearchItem[] credits = movieDb.PersonMovies(args.actorId);
                 MovHubViewModel moviesList = new MovHubViewModel(
                     em.ToHtml(actor),
-                    em.ToHtml(credits));
+                    em.ToHtml(credits), actor.Profile_Path);
                 return View["ViewTable", moviesList];
             };
 

@@ -72,6 +72,7 @@ namespace MovHubDb
             {
                 string body = client.DownloadString(String.Format(path, actorId, API_KEY));
                 Person p = (Person)JsonConvert.DeserializeObject(body, typeof(Person));
+                p.Profile_Path = "https://image.tmdb.org/t/p/original" + p.Profile_Path;
                 return p;
             } catch(WebException ex)
             {

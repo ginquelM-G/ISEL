@@ -137,12 +137,19 @@ namespace HtmlEmit
             il.Emit(OpCodes.Ret);              // ret
             
             Type t = tb.CreateType();
-            ab.Save(aName.Name + ".dll");
+            try {
+                ab.Save(aName.Name + ".dll");
+            }
+            catch(Exception e){
+               // Console.WriteLine("ERROR: " + e.Message);
+            }
+            
             return (IHtml)Activator.CreateInstance(t);
         }
 
         public string ToHtml(object obj)
         {
+            //string ul = "<ul class='list-group' style='float: left; min - width:100px; border - right: solid 100px;' >{0}</ul>";
             string ul = "<ul class='list-group'>{0}</ul>";
             string lis = ObjPropsToString(obj).Html(obj);
             return String.Format(ul, lis);
@@ -162,6 +169,7 @@ namespace HtmlEmit
                 tbody += String.Format(tr, emit.Html(o));
             }
             tbody += "</tbody>";
+
             return String.Format(table, thead, tbody);
         }
 
