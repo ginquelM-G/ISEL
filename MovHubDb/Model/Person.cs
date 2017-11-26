@@ -1,5 +1,6 @@
-﻿using Newtonsoft.Json;
-using HtmlReflect;
+﻿using HtmlReflect;
+using Newtonsoft.Json;
+
 namespace MovHubDb.Model
 {
     public class Person

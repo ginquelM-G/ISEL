@@ -136,7 +136,7 @@ namespace HtmlEmit
             }
             
             il.Emit(OpCodes.Ret);              // ret
-            
+
             Type t = tb.CreateType();
             ab.Save(aName.Name + ".dll");
             return (IHtml)Activator.CreateInstance(t);
@@ -162,6 +162,7 @@ namespace HtmlEmit
                 tbody += String.Format(tr, emit.Html(o));
             }
             tbody += "</tbody>";
+
             return String.Format(table, thead, tbody);
         }
 
