@@ -19,55 +19,33 @@ namespace HtmlEmit
             return String.Format(template, name, val != null ? val.ToString() : "");
         }
 
-        public static string Format(string name, object val, string format)
+        public static string FormatAttr(string name, object val, string format)
         {
             return format.Replace("{name}", name).Replace("{value}", val.ToString());
         }
 
-        public static string Format(object[] arr)
+        public static string FormatArr(string name, object value, string attr)
         {
-            string str = "<tbody>";
-            string head = "<thead>";
-            bool first = true;
-            for (int i = 0; i < arr.Length; i++)
-            {
-                head += "<tr>"; str += "<tr>";
-                foreach (PropertyInfo p in arr[i].GetType().GetProperties())
-                {
-                    if(p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
-                    object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute));
-                    if (attr != null)
-                    {
-                        string html = ((HtmlAsAttribute)attr).Html;
-                        str += String.Format("<td>{0}</td>", Format("", p.GetValue(arr[i]), html));
-                    } else
-                    {
-                        object val = p.GetValue(arr[i]);
-                        str += String.Format("<td>{0}</td>", val == null ? "" : val.ToString());
-                    }
-                    if (first) head += String.Format("<th>{0}</th>", p.Name);
-                }
-                first = false;
-                //str += "<tr>" + Emitter.ObjPropsToString(arr[i]) + "</tr>";
-                str += "</tr>";
-            }
-            return head + "</th></thead>" + str + "</tbody>";
+            string td = "<td>{0}</td>";
+            string val = value == null ? "" : value.ToString();
+            if (attr == null) return String.Format(td, val);
+            return String.Format(td, attr.Replace("{value}", val));
         }
 
         public abstract string Html(object target);
-        
+
     }
 
 
     public class Emitter
     {
         static readonly MethodInfo formatterForObject = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object) });
-        static readonly MethodInfo formatterForAttr = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(string), typeof(object), typeof(string) });
-        static readonly MethodInfo formatterForArray = typeof(AbstractHtml).GetMethod("Format", new Type[] { typeof(object[]) });
+        static readonly MethodInfo formatterForAttr = typeof(AbstractHtml).GetMethod("FormatAttr", new Type[] { typeof(string), typeof(object), typeof(string) });
+        static readonly MethodInfo formatterForArray = typeof(AbstractHtml).GetMethod("FormatArr", new Type[] { typeof(string), typeof(object), typeof(string) });
         static readonly MethodInfo concat = typeof(string).GetMethod("Concat", new Type[] { typeof(string), typeof(string) });
 
         static Dictionary<Type, IHtml> cachedTypes = new Dictionary<Type, IHtml>();
-        internal static string ObjPropsToString(object obj)
+        internal static IHtml ObjPropsToString(object obj)
         {
             IHtml objHtml;
             Type klass = obj.GetType();
@@ -76,7 +54,7 @@ namespace HtmlEmit
                 objHtml = EmitHtml(klass);
                 cachedTypes.Add(klass, objHtml);
             }
-            return objHtml.Html(obj);
+            return objHtml;
         }
 
         private static IHtml EmitHtml(Type klass)
@@ -102,25 +80,44 @@ namespace HtmlEmit
                 );
 
             ILGenerator il = methodBuilder.GetILGenerator();
-            PropertyInfo[] ps = klass.GetProperties(BindingFlags.Public | BindingFlags.Instance);
             
-            if(!klass.IsArray)
+            Type elementType = klass;
+            if (klass.IsArray)
+                elementType = klass.GetElementType();
+            LocalBuilder target = il.DeclareLocal(elementType);
+            il.Emit(OpCodes.Ldarg_1);
+            il.Emit(OpCodes.Castclass, elementType);
+            il.Emit(OpCodes.Stloc, target);
+
+            PropertyInfo[] ps = elementType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            il.Emit(OpCodes.Ldstr, ""); //str
+            foreach (PropertyInfo p in ps)
             {
-                il.Emit(OpCodes.Ldstr, ""); //str
-                foreach (PropertyInfo p in ps)
+                if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
+                object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
+
+                il.Emit(OpCodes.Ldstr, p.Name);
+                il.Emit(OpCodes.Ldloc, target);
+                il.Emit(OpCodes.Callvirt, p.GetGetMethod());
+                if (p.PropertyType.IsValueType)
+                    il.Emit(OpCodes.Box, p.PropertyType);
+
+                if (klass.IsArray)
                 {
-                    if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
-                    object attr = p.GetCustomAttribute(typeof(HtmlAsAttribute), true);
-
-                    il.Emit(OpCodes.Ldstr, p.Name);
-                    il.Emit(OpCodes.Ldarg_1);
-                    if (klass.IsValueType) il.Emit(OpCodes.Unbox, klass);
-                    else il.Emit(OpCodes.Castclass, klass);
-
-                    var targetGetMethod = klass.GetProperty(p.Name).GetGetMethod();
-                    var opCode = klass.IsValueType ? OpCodes.Call : OpCodes.Callvirt;
-                    il.Emit(opCode, targetGetMethod);
-
+                    if (attr == null)
+                    {
+                        il.Emit(OpCodes.Ldnull);
+                    }
+                    else
+                    {
+                        string html = ((HtmlAsAttribute)attr).Html;
+                        il.Emit(OpCodes.Ldstr, html);
+                    }
+                    il.Emit(OpCodes.Call, formatterForArray);
+                }
+                else
+                {
                     if (attr == null)
                     {
                         //string
@@ -133,22 +130,10 @@ namespace HtmlEmit
                         il.Emit(OpCodes.Ldstr, html);
                         il.Emit(OpCodes.Call, formatterForAttr);
                     }
-                    il.Emit(OpCodes.Call, concat);
                 }
-            }
-            else
-            {
-                // array
-                LocalBuilder target = il.DeclareLocal(klass);
-                il.Emit(OpCodes.Ldarg_1);          // push target
-                il.Emit(OpCodes.Castclass, klass); // castclass
-                il.Emit(OpCodes.Stloc, target);    // store on local variable 
-
-                il.Emit(OpCodes.Ldstr, "");
-                il.Emit(OpCodes.Ldloc_0);
-                il.Emit(OpCodes.Call, formatterForArray);
                 il.Emit(OpCodes.Call, concat);
             }
+            
             il.Emit(OpCodes.Ret);              // ret
             
             Type t = tb.CreateType();
@@ -158,15 +143,39 @@ namespace HtmlEmit
 
         public string ToHtml(object obj)
         {
-            string template = "<ul class='list-group'>{0}</ul>";
-            return String.Format(template, ObjPropsToString(obj));
+            string ul = "<ul class='list-group'>{0}</ul>";
+            string lis = ObjPropsToString(obj).Html(obj);
+            return String.Format(ul, lis);
         }
 
         public string ToHtml(object[] arr)
         {
+            string table = "<table class='table table-hover'>{0}{1}</table>";
+            string thead = "<thead><tr>{0}</tr></thead>";
+            string tr = "<tr>{0}</tr>";
 
-            string table = "<table class='table table-hover'>{0}</table>";
-            return String.Format(table, ObjPropsToString(arr));
+            thead = String.Format(thead, ConstructColumns(arr.GetType().GetElementType()));
+            string tbody = "<tbody>";
+            IHtml emit = ObjPropsToString(arr);
+            foreach (object o in arr)
+            {
+                tbody += String.Format(tr, emit.Html(o));
+            }
+            tbody += "</tbody>";
+            return String.Format(table, thead, tbody);
+        }
+
+        private object ConstructColumns(Type type)
+        {
+            string str = "";
+            string th = "<th>{0}</th>";
+
+            foreach (PropertyInfo p in type.GetProperties())
+            {
+                if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
+                str += String.Format(th, p.Name);
+            }
+            return str;
         }
     }
 }

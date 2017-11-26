@@ -4,7 +4,7 @@ using System;
 
 namespace MovHubDb.Model
 {
-    public struct Movie
+    public class Movie
     {
         [HtmlIgnore] public int Id { get; set; }
         [JsonProperty("original_title")]
