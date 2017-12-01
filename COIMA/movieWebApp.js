@@ -38,6 +38,7 @@ const routes = {
 
 function router(req, resp){
 	const urlObj = url.parse(req.url, true)
+	service.setResponse(resp)
 	let action
 	//console.log('=> '+ urlObj.pathname)
 	//console.log('==> '+ urlObj.query.name)
