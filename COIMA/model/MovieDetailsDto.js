@@ -13,9 +13,9 @@ function MovieDetails(jsonData){
     this.original_title = jsonData.original_title
     this.overview = jsonData.overview
     this.poster_path = jsonData.poster_path
-    //this.cast = [];
+    this.cast = null || [];
 
-    console.log("MOVIE_DEYAILS\n "+ this.id+ "\n\n"+ this.original_title)
+    //console.log("MOVIE_DETAILS\n "+ this.id+ "\n\n"+ this.original_title)
 
     //console.log("HELL "+castS[0].name.toString())
 

@@ -18,7 +18,7 @@ function checkRequest(response, cb){
             //callMyMessageSendingFunction()
             cb()
         }
-        console.log(remainingRequest)
+        //console.log(remainingRequest)
     });
 
 }

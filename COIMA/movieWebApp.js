@@ -73,7 +73,6 @@ function router(req, resp){
 				console.log("ERROR: "+err.message)
 				//throw err
 			}else{
-				console.log("\n\n "+ obj.results)
 				data = actionCallBack(urlObj, obj, data)
 				//data = view(obj)
 	 			resp.statusCode = 200
