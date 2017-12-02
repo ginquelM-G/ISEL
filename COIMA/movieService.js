@@ -9,20 +9,20 @@ const MovieCredits = require('./model/CreditsDto')
 const ActorDetails = require('./model/ActorCreditsDto')
 const CastItemDto  = require('./model/CastItemDto')
 var cache = require('./cache')
+var response
 
 init()
 
 
 function init(){
     var details =[];
-    var response
+    response = null
     //cache =  new cache.MemoryCache()
     cache.MemoryCacheInit()
-    console.log('... Cache init() ...')
+    //console.log('... Cache init() ...')
 }
 
 
-//getMoviesByName('Batman', () =>{})
 
 module.exports = {
     getMoviesByName,

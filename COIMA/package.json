@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Chelas Open Internet Movie Application",
   "main": "index.js",
+  
   "scripts": {
-    "test": "echo \"Error: no test spsecified\" && exit 1",
+    "test": "nodeunit tests/movieServiceTest.js",
     "start": "node movieWebApp.js"
   },
+
   "author": "",
   "license": "ISC",
   "dependencies": {
