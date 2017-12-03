@@ -2,13 +2,13 @@ const req = require('request')
 const reqS = require('sync-request')
 const API_KEY = "b531994cdfaa8e3b441e4086b1c6756d";
 
-const checkRequest = require('./controlTheNumberOfRequests')
-const MovieSearch  = require('./model/MovieSearchDto')
-const MovieDetails = require('./model/MovieDetailsDto')
-const MovieCredits = require('./model/CreditsDto')
-const ActorDetails = require('./model/ActorCreditsDto')
-const CastItemDto  = require('./model/CastItemDto')
-var cache = require('./cache')
+const checkRequest = require('../utils/controlTheNumberOfRequests')
+const MovieSearch  = require('../model/MovieSearchDto')
+const MovieDetails = require('../model/MovieDetailsDto')
+const MovieCredits = require('../model/CreditsDto')
+const ActorDetails = require('../model/ActorCreditsDto')
+const CastItemDto  = require('../model/CastItemDto')
+var cache = require('../utils/cache')
 var response
 
 

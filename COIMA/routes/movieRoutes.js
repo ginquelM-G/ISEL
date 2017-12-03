@@ -5,6 +5,12 @@ const movieService = require('./movieService')()
 
 module.exports = router
 
+/* GET home page. */
+router.get('/', function(req, res, next) {
+    //res.render('index', { title: 'Chelas Open Internet Movie Application' });
+    res.render('layout', { title: 'Chelas Open Internet Movie Application' });
+})
+
 
 // ?? /search?name={query} ||  /movies?name={query}
 router.get('/search', (req, resp, next) =>{
