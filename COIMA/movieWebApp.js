@@ -3,121 +3,59 @@ const url =  require('url')
 const service = require('./movieService')
 const fs = require('fs')
 const hbs = require('handlebars')
+const express = require('express')
+const movieRouter = require('./movieRoutes')
 const port = 3010
 
 
 // Init HTTP server
+const router = express() //	Init an empty pipeline of Middlewares
 const server = http.createServer(router)
 server.listen(port)
 
 //Endpoints paths
-const movies = '/movies' // query-string ?name=.. 
-const listOfmovie = '/movies\/[0-9]+'
-const listOfPerson = '/movies\/[0-9]+/'
-const actors = '/actors\/[0-9]+' 
 
-const routes = {
-	'serchMovies':{
-		action: service.getMoviesByName,
-		view: view('./views/moviesView.hbs')
-
-	},
-	 'movieById':{
-		action: service.getMoviesByName,
-		view: view('./views/movieDetailsView.hbs')
-
-	},
-	 'actorById':{
-		action: service.getPersonDetails,
-		view: view('./views/actorView.hbs')
-	}
-}
-
-
-
-
-function router(req, resp){
+router.use((req, resp, next) => {
 	const urlObj = url.parse(req.url, true)
-	service.setResponse(resp)
-	let action
+	//service.setResponse(resp)
 	//console.log('=> '+ urlObj.pathname)
 	//console.log('==> '+ urlObj.query.name)
-	if(movies == urlObj.pathname || urlObj.query.name != undefined){
-		console.log('1. Pesquisa')        
-		action = cb => service.getMoviesByName(urlObj.query.name, cb)
-	}
-	if(listOfmovie == urlObj.pathname || urlObj.pathname.match(listOfmovie)){ 
-		console.log("2. Detalhes de um filme")
-		var movieId = urlObj.pathname.split('/')
-		//console.log(movieId[2])
-		action = cb => service.getMoviesDetails(movieId[2], cb)
-	}
-/*	if(movies == urlObj.pathname && urlObj.query!= undefined){
-		console.log("3. Lista de personagens de um filme")
-	}*/
-	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
-		 var movieId = urlObj.pathname.toString().split('/')
-		 action = cb => service.getPersonDetails(movieId[2], cb)
-	}
-/*
-	if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
-		 console.log("Detalhes de uma pessoa")
-	}
-	*/
-	if(action != undefined){ 
-		const obj = action((err, obj) =>{
-			let data 
-			if(err){
-				data = err.message
-				resp.statusCode = 500
-				console.log("ERROR: "+err.message)
-				//throw err
-			}else{
-				data = actionCallBack(urlObj, obj, data)
-				//data = view(obj)
-	 			resp.statusCode = 200
-			}
-			resp.setHeader('Content-Type', 'text/html')
-			resp.end(data)
-		})
-	}
-	else{
-	//(resp != 200){
-		console.log(resp.toString())
-		resp.statusCode = 404 // Resource Not Found
-		resp.end()
-	}
-
-}
-
-
-
-
-function actionCallBack(urlObj, obj,  data){		
-	let view
-	let html		
-	if(movies == urlObj.pathname || urlObj.query.name != undefined){
-		console.log('1. Pesquisa [actionCallBack]')        
-		view = routes['serchMovies'].view			
-	}
-	else if(listOfmovie == urlObj.pathname || urlObj.pathname.match(listOfmovie)){ 
-		console.log("2. Detalhes de um filme [actionCallBack]")
-		view = routes['movieById'].view
-	}
-	else if(actors  == urlObj.pathname || urlObj.pathname.match(actors)){
-		 console.log("3. Actor Details [actionCallBack]")
-		 view = routes['actorById'].view
-		 //console.log("\n\nOBJ" + obj.cast[0]. +"OBJ END")
-		 // console.log("\n\npersonAndMovieDetails.cast: "+ obj.cast[0].title)
-	}
 	
-	html = view(obj)
-	data = html
-	return data
-}
+	req.query = urlObj.query
+	resp.send = function(viewPath, ctx){
+		const html = view(viewPath)(ctx)
+		resp.setHeader('Content-Type', 'text/html')
+		resp.end(html)
+	}
+	next()
+})
+
+router.use(movieRouter)
 
 
+movieRouter.use((err, req, resp, next) => {
+    resp.statusCode = 500
+    resp.setHeader('Content-Type', 'text/html')
+    resp.end(err.message)    
+})
+
+movieRouter.use((req, resp) => {
+    resp.statusCode = 404 // Resource Not Found
+    resp.end()
+})
+
+
+
+/**
+ * Returns template Handlebars.
+ * 
+ * @param {*} viewPath Path for handlebars template source.
+ */
 function view(viewPath) {
-	const viewSrc = fs.readFileSync(viewPath).toString()
-	return hbs.compile(viewSrc)
+	if(!view.paths) view.paths = {} // Init paths cache
+    if(view.paths[viewPath]) return view.paths[viewPath]
+    const viewSrc = fs.readFileSync(viewPath).toString()
+    const template = hbs.compile(viewSrc)
+    view.paths[viewPath] = template
+    return template
 }

@@ -11,9 +11,10 @@ const CastItemDto  = require('./model/CastItemDto')
 var cache = require('./cache')
 var response
 
-init()
 
 
+/** 
+ * init()
 function init(){
     var details =[];
     response = null
@@ -21,16 +22,33 @@ function init(){
     cache.MemoryCacheInit()
     //console.log('... Cache init() ...')
 }
+*/
+
+module.exports = init
+
+function init(dataSource) {
+    response = null
+    cache.MemoryCacheInit()
+    const req = dataSource
+        ? dataSource
+        : require('request')
+        
+    return {
+        getMoviesByName,
+        getMoviesDetails,
+        getPersonDetails,
+        setResponse
+    }
 
 
-
+/*
 module.exports = {
     getMoviesByName,
     getMoviesDetails,
     getPersonDetails,
     setResponse
 }
-
+*/
 
 //1. https://api.themoviedb.org/3/search/movie?api_key=*****&name=war+games
 function getMoviesByName(name, cb){
@@ -169,3 +187,4 @@ function setResponse(resp){
     response = resp
 }
 
+}

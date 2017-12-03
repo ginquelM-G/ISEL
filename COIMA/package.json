@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "description": "Chelas Open Internet Movie Application",
   "main": "index.js",
-  
   "scripts": {
     "test": "nodeunit tests/movieServiceTest.js",
     "start": "node movieWebApp.js"
   },
-
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "express": "^4.16.2",
     "fs": "0.0.1-security",
     "handlebars": "^4.0.11",
+    "limiter": "^1.1.2",
     "request": "2.83.0",
     "sync-request": "^4.1.0"
   }
