@@ -1,19 +1,32 @@
 const http = require('http')
 const url =  require('url')
+const path = require('path')
 const service = require('./movieService')
-const fs = require('fs')
-const hbs = require('handlebars')
 const express = require('express')
 const movieRouter = require('./movieRoutes')
 const port = 3010
 
 
-// Init HTTP server
+/*
+	Setup express Web App
+*/
 const router = express() //	Init an empty pipeline of Middlewares
+// view engine setup
+router.set('views', path.join(__dirname, 'views'))
+router.set('view engine', 'hbs')
+
+
+
+
+
+// Init HTTP server
 const server = http.createServer(router)
 server.listen(port)
 
 //Endpoints paths
+
+
+/**
 
 router.use((req, resp, next) => {
 	const urlObj = url.parse(req.url, true)
@@ -29,7 +42,7 @@ router.use((req, resp, next) => {
 	}
 	next()
 })
-
+ */
 router.use(movieRouter)
 
 
@@ -45,17 +58,3 @@ movieRouter.use((req, resp) => {
 })
 
 
-
-/**
- * Returns template Handlebars.
- * 
- * @param {*} viewPath Path for handlebars template source.
- */
-function view(viewPath) {
-	if(!view.paths) view.paths = {} // Init paths cache
-    if(view.paths[viewPath]) return view.paths[viewPath]
-    const viewSrc = fs.readFileSync(viewPath).toString()
-    const template = hbs.compile(viewSrc)
-    view.paths[viewPath] = template
-    return template
-}
