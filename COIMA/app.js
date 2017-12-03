@@ -1,9 +1,15 @@
 const http = require('http')
 const url =  require('url')
 const path = require('path')
+const cookieParser = require('cookie-parser')
+const passport = require('passport')
+const session = require('express-session')
+const bodyParser = require('body-parser')
+
 const service = require('./routes/movieService')
 const express = require('express')
 const movieRouter = require('./routes/movieRoutes')
+const userRouter = require('./routes/userRoutes')
 const port = 3010
 
 
@@ -14,6 +20,16 @@ const router = express() //	Init an empty pipeline of Middlewares
 // view engine setup
 router.set('views', path.join(__dirname, 'views'))
 router.set('view engine', 'hbs')
+
+// --------------------
+router.use(bodyParser.urlencoded({ extended: false }))
+router.use(cookieParser())
+router.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true }))
+router.use(passport.initialize())
+router.use(passport.session()) // Obtem da sessão user id -> deserialize(id) -> user -> req.user
+
+router.use(userRouter)
+router.use(movieRouter)
 
 
 
@@ -26,24 +42,7 @@ server.listen(port)
 //Endpoints paths
 
 
-/**
 
-router.use((req, resp, next) => {
-	const urlObj = url.parse(req.url, true)
-	//service.setResponse(resp)
-	//console.log('=> '+ urlObj.pathname)
-	//console.log('==> '+ urlObj.query.name)
-	
-	req.query = urlObj.query
-	resp.send = function(viewPath, ctx){
-		const html = view(viewPath)(ctx)
-		resp.setHeader('Content-Type', 'text/html')
-		resp.end(html)
-	}
-	next()
-})
- */
-router.use(movieRouter)
 
 
 movieRouter.use((err, req, resp, next) => {

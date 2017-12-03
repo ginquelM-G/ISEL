@@ -7,8 +7,9 @@ module.exports = router
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+    console.log('HOME PAG')
     //res.render('index', { title: 'Chelas Open Internet Movie Application' });
-    res.render('layout', { title: 'Chelas Open Internet Movie Application' });
+    res.render('index', { title: 'Chelas Open Internet Movie Application' });
 })
 
 
