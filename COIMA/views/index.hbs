@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <h6>Welcome to {{title}}</h6>
+    <h6>Welcome {{username}} to {{title}}</h6>
     <p>{{title}}</p>
   </head>
   <body>
     {{{body}}}
+
+     <div class="col-xs-4">
+     <form action="/search?">
+        Movie Name:<br>
+        <input type="text" name="name" value="">
+        <input type="submit" value="Submit">
+      </form> 
+
+       {{!--  <form method="POST" action="/classics2">
+            <input type="submit" value="....">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="title" value="{{title}}">
+        </form> --}}
+       
+    </div>
+
+
   </body>
 </html>

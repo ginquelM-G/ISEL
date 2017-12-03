@@ -1,6 +1,7 @@
 const http = require('http')
 const url =  require('url')
 const path = require('path')
+const hbs = require('hbs')
 const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const session = require('express-session')
@@ -10,6 +11,9 @@ const service = require('./routes/movieService')
 const express = require('express')
 const movieRouter = require('./routes/movieRoutes')
 const userRouter = require('./routes/userRoutes')
+const classicsRouter = require('./routes/classicsRoutes')
+const bestAllTimeRouter = require('./routes/bestAllTimeRoute')
+const imdbMostRated = require('./routes/imdbMostRatedRoutes')
 const port = 3010
 
 
@@ -20,15 +24,21 @@ const router = express() //	Init an empty pipeline of Middlewares
 // view engine setup
 router.set('views', path.join(__dirname, 'views'))
 router.set('view engine', 'hbs')
+hbs.registerPartials(__dirname + '/views/partials')
+
 
 // --------------------
 router.use(bodyParser.urlencoded({ extended: false }))
+router.use(express.static(path.join(__dirname, 'public'))) // ter acesso aos ficheiros o directorio public(ex: .css)
 router.use(cookieParser())
 router.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true }))
 router.use(passport.initialize())
 router.use(passport.session()) // Obtem da sessão user id -> deserialize(id) -> user -> req.user
 
 router.use(userRouter)
+router.use(classicsRouter)
+router.use(bestAllTimeRouter)
+router.use(imdbMostRated)
 router.use(movieRouter)
 
 

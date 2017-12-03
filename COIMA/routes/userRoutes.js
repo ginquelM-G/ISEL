@@ -8,31 +8,39 @@ module.exports = router
 
 
 router.get('/login', function(req, res, next) {
-  console.log('LOGIN ON')
-  res.render('login', {layout: false});
-  console.log('after')
-});
+  res.render('login', {layout: false})
+})
 
 
 router.post('/login', (req, resp, next)=>{
-  console.log('USER $$$$$$$$$$$$$')
-  console.log(req.body)
-
-
+  //console.log(req.body)
   userService.authenticate(req.body.username, req.body.password, (err, user, info)=>{
     if(err) return next(err)
     if(info) return next(new Error(info))
     req.logIn(user, (err)=>{
       if(err) return next(err)
       resp.redirect('/')
+      //resp.redirect('/account/'+user.username)
     })
   })
 })
 
 
 router.use((req, res, next)=>{
-  if(req.user) res.locals.favourites = req.user.id
-  else res.locals.favourites=[]
+  if(req.user){
+     res.locals.classics = req.user.classics
+     res.locals.best_all_time = req.user.best_all_time
+     res.locals.imdb_most_rated = req.user.imdb_most_rated
+     res.locals.to_see = req.user.to_see
+     res.locals.seen = req.user.seen
+  }
+  else{
+     res.locals.classics = []
+     res.locals.best_all_time = []
+     res.locals.imdb_most_rated = []
+     res.locals.to_see = []
+     res.locals.seen = []
+    }
   next()
 })
 

@@ -1,26 +1,70 @@
-<html>
-    <head>
-
-    </head>
-    <body>
-        <table>
+<div class="row">
+    <div>
+        <a class="btn btn-primary" href="/login">Login</a>
+    </div>
+    <div class="col-xs-4">
+        <table class="table">
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Classics</th>
+                <th>Best All Time</th>
+                <th>IMDB Most Rated</th>
+                <th>To See</th>
+                <th>Seen</th>
             </tr>
             {{#each .}}
                 <tr>
+
                     <td>{{id}}</td>
                     <td>
                         <a href='movies/{{id}}'>
                         {{title}}
                         </a>
                     </td>
+                    <td>
+                        <form method="POST" action="/classics2">
+                            <input type="submit" value="add To">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="title" value="{{title}}">
+                        </form>
+                    </td>
 
+                   <td>
+                        <form method="POST" action="/best_all_time2">
+                            <input type="submit" value="add To">
+                             <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="title" value="{{title}}">
+                        </form>
+                    </td>
+                    <td>
+                        <form method="POST" action="/imdb_most_rated2">
+                            <input type="submit" value="add To">
+                             <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="title" value="{{title}}">
+                        </form>
+                    </td>
+                     <td>
+                        <form method="POST" action="/toSee2">
+                            <input type="submit" value="add To">
+                             <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="title" value="{{title}}">
+                        </form>
+                    </td>
+                     <td>
+                        <form method="POST" action="/seen2">
+                            <input type="submit" value="add To">
+                            <input type="hidden" name="id" value="{{id}}">
+                            <input type="hidden" name="title" value="{{title}}">
+                        </form>
+                    </td>
                 </tr>
             {{/each}}
         </table>
+    </div>
 
-    </body>
+    <div class="panel col-xs-8">
+       {{!--  {{>classics}} --}}
+    </div>
 
-</html>
+</div>

@@ -6,10 +6,10 @@ const movieService = require('./movieService')()
 module.exports = router
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-    console.log('HOME PAG')
+router.get('/', function(req, resp, next) {
     //res.render('index', { title: 'Chelas Open Internet Movie Application' });
-    res.render('index', { title: 'Chelas Open Internet Movie Application' });
+    console.log('/ Home Page' + resp)
+    resp.render('index', { title: 'Chelas Open Internet Movie Application', username: 'User' });
 })
 
 
