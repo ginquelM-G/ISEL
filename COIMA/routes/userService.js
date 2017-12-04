@@ -5,13 +5,18 @@
 * Array of User objects
 */
 
-const dbUsers = 'http://127.0.0.1:5984/movies'
+const dbUsers = 'http://127.0.0.1:5984/movies/'
+const nano = require('nano')('http://localhost:5984/')
+/* var db_name = 'movies' 
+var moviesDB = nano.use(db_name) */
+
 const request = require('request')
 
 module.exports ={
     'find': find,
     'authenticate': authenticate,
-    'save': save
+    'save': save,
+    'createNewFileInCouchDB': createNewFileInCouchDB
 }
 
 
@@ -55,4 +60,77 @@ function save(user, cb){
         if(err) return cb(err)
         cb()
     })
+}
+
+/*
+* Creating New Documents.
+* Can be createt new documents by using the insert method..
+*/
+function createNewFileInCouchDB(reqBody, cb){
+    var db_name = reqBody.username.toString() 
+    console.log('body: %j', reqBody)
+    const path = dbUsers + '/' + reqBody.username.toString()
+    var options ={
+        url: dbUsers + db_name,
+        method: "PUT",
+        Headers: {"Content-Type": "application/json"},
+        json: true,
+        //body: JSON.stringify(user)
+        body: {
+            "username": reqBody.username,
+            "password": reqBody.password,
+            "fullname": reqBody.fullname,
+            "classics":[],
+            "best_all_time":[],
+            "imdb_most_rated":[],
+            "to_see":[],
+            "seen":[]
+        }
+    }
+    //options.body = options.body.toString()
+   
+
+    // Create a database/collection inside CouchDB
+  /*   request.put(dbUsers, function(err, resp, body) {
+        // Add a document with an ID
+        request.put({
+            url: dbUsers + db_name,
+            body: {
+                "username": reqBody.username,
+                "password": reqBody.password,
+                "fullname": reqBody.fullname,
+                "classics":[],
+                "best_all_time":[],
+                "imdb_most_rated":[],
+                "to_see":[],
+                "seen":[]
+            },
+            json: true,
+            }, function(err, resp, body) {
+                if(err) cb(err)
+                cb()
+            })
+    }) */
+  /*   nano.db.create(db_name, function (error, body, headers) {
+        if(error) return cb(err)
+        var moviesDB  = nano.db.use(db_name)
+        moviesDB.insert(options.body, options.body.username, function(err, body){
+            if(!err)cb(err)
+            cb()
+            console.log('### %j' + body)
+        })
+    }) */
+ 
+  
+    request(dbUsers, function(err, resp, body) {
+        // Read the document
+        request.put(path, options, function(err, res, body) {
+                if(err) cb(err)
+                console.log('### %j' + body)
+                cb()
+            })
+           
+        console.log('end callbakc')
+    })
+    
 }

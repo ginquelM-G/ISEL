@@ -3,9 +3,13 @@ const router = express.Router()
 const userService = require('./userService')
 const passport = require('passport')
 
+
 module.exports = router
 
 
+router.get('/sign_up', function(req, res, next) {
+  res.render('signUp', {layout: false})
+})
 
 router.get('/login', function(req, res, next) {
   res.render('login', {layout: false})
@@ -24,6 +28,27 @@ router.post('/login', (req, resp, next)=>{
     })
   })
 })
+
+router.post('/sign_up', (req, resp, next)=>{
+
+  userService.createNewFileInCouchDB(req.body, (err) =>{
+      if(err) return next(err)
+      console.log('\n\nCreated a New File In CouchDB.')
+      resp.redirect('/login')
+  })
+  /*
+  userService.authenticate(req.body.username, req.body.password, (err, user, info)=>{
+    if(err) return next(err)
+    if(info) return next(new Error(info))
+    req.logIn(user, (err)=>{
+      if(err) return next(err)
+      resp.redirect('/login')
+      //resp.redirect('/account/'+user.username)
+    })
+  })
+  */
+})
+
 
 
 router.use((req, res, next)=>{

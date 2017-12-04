@@ -29,10 +29,14 @@ hbs.registerPartials(__dirname + '/views/partials')
 
 // --------------------
 router.use(bodyParser.urlencoded({ extended: false }))
-router.use(express.static(path.join(__dirname, 'public'))) // ter acesso aos ficheiros o directorio public(ex: .css)
+router.use(express.static(path.join(__dirname, 'public'))) // ter acesso aos ficheiros do directorio public(ex: .css)
 router.use(cookieParser())
 router.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true }))
-router.use(passport.initialize())
+/*
+* are invoked on each request and 
+* they are the ones that call serializeUser  and deserializer
+*/
+router.use(passport.initialize()) // is invoked on each request and is the one that call serializeUser to load the user id to req.user
 router.use(passport.session()) // Obtem da sessão user id -> deserialize(id) -> user -> req.user
 
 router.use(userRouter)
