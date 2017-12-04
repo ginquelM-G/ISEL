@@ -24,7 +24,11 @@
                     </td>
                     <td>
                         <form method="POST" action="/classics2">
-                            <input type="submit" value="add To">
+                          {{!--   <input type="submit" value="add">
+                            <input type="submit" value="del"> --}}
+                            
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/add">Add</button>
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/del">del</button>
                             <input type="hidden" name="id" value="{{id}}">
                             <input type="hidden" name="title" value="{{title}}">
                         </form>
@@ -32,28 +36,44 @@
 
                    <td>
                         <form method="POST" action="/best_all_time2">
-                            <input type="submit" value="add To">
+                            {{!--  <input type="submit" value="add">
+                             <input type="submit" value="del"> --}}
+                              <button type="submit" class="btn btn-primary btn-sm" formaction="/add_to_best_all_time">Add</button>
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/del_to_best_all_time">del</button>
                              <input type="hidden" name="id" value="{{id}}">
                             <input type="hidden" name="title" value="{{title}}">
                         </form>
                     </td>
                     <td>
                         <form method="POST" action="/imdb_most_rated2">
-                            <input type="submit" value="add To">
-                             <input type="hidden" name="id" value="{{id}}">
+                            {{!--  <input type="submit" value="add">
+                            <input type="submit" value="del"> --}}
+
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/add_imdb_most_rated">Add</button>
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/del_imdb_most_rated">del</button>
+                             
+                            <input type="hidden" name="id" value="{{id}}">
                             <input type="hidden" name="title" value="{{title}}">
                         </form>
                     </td>
                      <td>
                         <form method="POST" action="/toSee2">
-                            <input type="submit" value="add To">
+                             {{!-- <input type="submit" value="add">
+                             <input type="submit" value="del"> --}}
+
+                             <button type="submit" class="btn btn-primary btn-sm" formaction="/add">Add</button>
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/del">del</button>
                              <input type="hidden" name="id" value="{{id}}">
                             <input type="hidden" name="title" value="{{title}}">
                         </form>
                     </td>
                      <td>
                         <form method="POST" action="/seen2">
-                            <input type="submit" value="add To">
+                           {{!--  <input type="submit" value="add">
+                            <input type="submit" value="del"> --}}
+                             
+                             <button type="submit" class="btn btn-primary btn-sm" formaction="/add">Add</button>
+                            <button type="submit" class="btn btn-primary btn-sm" formaction="/del">del</button>
                             <input type="hidden" name="id" value="{{id}}">
                             <input type="hidden" name="title" value="{{title}}">
                         </form>
