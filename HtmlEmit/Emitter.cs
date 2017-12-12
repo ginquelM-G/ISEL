@@ -91,8 +91,13 @@ namespace HtmlEmit
             il.Emit(OpCodes.Stloc, target);
 
             PropertyInfo[] ps = elementType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-            il.Emit(OpCodes.Ldstr, ""); //str
+            if (!klass.IsArray)
+            {
+                il.Emit(OpCodes.Ldstr, "<ul class='list-group'>"); //str
+            } else {
+                il.Emit(OpCodes.Ldstr, ""); //str
+            }
+            
             foreach (PropertyInfo p in ps)
             {
                 if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
@@ -134,7 +139,16 @@ namespace HtmlEmit
                 }
                 il.Emit(OpCodes.Call, concat);
             }
-            
+
+            if (!klass.IsArray)
+            {
+                il.Emit(OpCodes.Ldstr, "</ul>"); //str
+            }
+            else
+            {
+                il.Emit(OpCodes.Ldstr, ""); //str
+            }
+            il.Emit(OpCodes.Call, concat);
             il.Emit(OpCodes.Ret);              // ret
 
             Type t = tb.CreateType();
@@ -144,20 +158,18 @@ namespace HtmlEmit
 
         public string ToHtml(object obj)
         {
-            string ul = "<ul class='list-group'>{0}</ul>";
-            string lis = ObjPropsToString(obj).Html(obj);
-            return String.Format(ul, lis);
+            return ObjPropsToString(obj).Html(obj);
         }
 
-        public string ToHtml(object[] arr)
+        public string ToHtml<T>(IEnumerable<T> arr)
         {
             string table = "<table class='table table-hover'>{0}{1}</table>";
-            string thead = ConstructTableHead(arr[0].GetType());
+            string thead = ConstructTableHead(typeof(T));
             string tr = "<tr>{0}</tr>";
 
             string tbody = "<tbody>";
             IHtml emit = ObjPropsToString(arr);
-            foreach (object o in arr)
+            foreach (T o in arr)
             {
                 tbody += String.Format(tr, emit.Html(o));
             }
@@ -177,6 +189,54 @@ namespace HtmlEmit
                 str += String.Format(th, p.Name);
             }
             return str + "</tr></thead>";
+        }
+
+        public Emitter ForTypeDetails<T>(Func<T, string> formatter)
+        {
+            Type t = typeof(T);
+            cachedTypes.Add(t, new HtmlFormatter<T>(formatter));
+            return this;
+        }
+
+        public Emitter ForTypeInTable<T>(IEnumerable<string> headers, Func<T, string> transf)
+        {
+            Type t = typeof(T);
+            cachedTypes.Add(t, new HtmlFormatterTypeInTable<T>(headers, transf));
+            return this;
+        }
+
+        class HtmlFormatter<T> : IHtml
+        {
+
+            Func<T, string> formatter;
+
+            public HtmlFormatter(Func<T, string> f)
+            {
+                formatter = f;
+            }
+
+            public string Html(object o)
+            {
+                return formatter((T)o);
+            }
+
+        }
+
+        private class HtmlFormatterTypeInTable<T> : IHtml
+        {
+            private IEnumerable<string> headers;
+            private Func<T, string> transf;
+
+            public HtmlFormatterTypeInTable(IEnumerable<string> headers, Func<T, string> transf)
+            {
+                this.headers = headers;
+                this.transf = transf;
+            }
+
+            public string Html(object target)
+            {
+                return transf((T)target);
+            }
         }
     }
 }
