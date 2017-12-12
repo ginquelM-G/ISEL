@@ -95,7 +95,7 @@ namespace HtmlEmit
             {
                 il.Emit(OpCodes.Ldstr, "<ul class='list-group'>"); //str
             } else {
-                il.Emit(OpCodes.Ldstr, ""); //str
+                il.Emit(OpCodes.Ldstr, "<tr>"); //str
             }
             
             foreach (PropertyInfo p in ps)
@@ -146,7 +146,7 @@ namespace HtmlEmit
             }
             else
             {
-                il.Emit(OpCodes.Ldstr, ""); //str
+                il.Emit(OpCodes.Ldstr, "</tr>"); //str
             }
             il.Emit(OpCodes.Call, concat);
             il.Emit(OpCodes.Ret);              // ret
@@ -165,13 +165,13 @@ namespace HtmlEmit
         {
             string table = "<table class='table table-hover'>{0}{1}</table>";
             string thead = ConstructTableHead(typeof(T));
-            string tr = "<tr>{0}</tr>";
 
             string tbody = "<tbody>";
             IHtml emit = ObjPropsToString(arr);
             foreach (T o in arr)
             {
-                tbody += String.Format(tr, emit.Html(o));
+     
+                tbody += emit.Html(o);
             }
             tbody += "</tbody>";
 

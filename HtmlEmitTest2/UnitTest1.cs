@@ -38,7 +38,7 @@ namespace HtmlEmitTest2
             });
             TheMovieDbClient client = new TheMovieDbClient();
             MovieSearchItem res = client.Search("drive", 1)[0];
-            string htmlatual = html.ToHtml(new MovieSearchItem[] { res });
+            string htmlatual = html.ToHtml<MovieSearchItem>(new MovieSearchItem[] { res });
             string expected = "<table class='table table-hover'>" +
                 "<thead>" +
                 "<tr><th>Id</th><th>Title</th><th>ReleaseDate</th><th>VoteAverage</th></tr>" +
