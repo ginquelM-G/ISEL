@@ -53,10 +53,10 @@ object DbSchema {
                         MoviesContract.COL_ID + " INTEGER PRIMARY KEY, " +
                         COL_MOVIE_ID + " UNIQUE REFERENCES Movies(COL_MOVIE_ID), " +
                         COL_POSTER_PATH + " TEXT UNIQUE, " +
-                        COL_TITLE + "TEXT,"+
+                        COL_TITLE + " TEXT,"+
                         COL_VOTE_AVERAGE + " REAL, " +
                         COL_VOTE_COUNT + " INTEGER, " +
-                        COL_POPULARITY + "REAL, "+
+                        COL_POPULARITY + " REAL, "+
                         COL_OVERVIEW + " TEXT, " +
                         COL_RESLEASE_DATE + " TEXT )"
 

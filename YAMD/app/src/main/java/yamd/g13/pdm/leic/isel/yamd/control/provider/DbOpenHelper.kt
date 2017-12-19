@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper
 class DbOpenHelper(context: Context?) : SQLiteOpenHelper(context, DbSchema.DB_NAME, null, DbSchema.DB_VERSION) {
 
     override fun onCreate(db: SQLiteDatabase) {
-        deleteDb(db)
+        //deleteDb(db)
         createDb(db)
     }
 

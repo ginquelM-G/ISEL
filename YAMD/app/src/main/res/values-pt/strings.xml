@@ -8,6 +8,8 @@
     <string name="title_more">Mais</string>
     <string name="overview">Síntese</string>
     <string name="vote_average">Média de Votos</string>
+    <string name="follow">Seguir</string>
+    <string name="followMovieText" translatable="true">Queres seguir este filme?</string>
     <string name="about_action_menu">Sobre</string>
     <string name="action_settings">Configurações</string>
     <string name="title_activity_detail">Detalhe do filme</string>

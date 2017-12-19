@@ -1,6 +1,7 @@
 package yamd.g13.pdm.leic.isel.yamd.control
 
 import android.app.Activity
+import android.app.FragmentController
 import android.content.*
 import android.content.res.Configuration
 import android.database.Cursor
@@ -11,10 +12,13 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
+import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import android.widget.Toast
 import com.squareup.picasso.Picasso
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.commands.Command
@@ -218,8 +222,43 @@ object Controller{
             Controller.loadImage(picasso, context, path, width, imageView)
             picasso.invalidate(path)
             voteAverage.rating = Controller.currentMovieDetail!!.voteAverage.toFloat()
+            onInsert(Controller)
         }
     }
+
+    public fun getController() : Controller{
+        return Controller
+    }
+
+    fun onInsert(controller: Controller) {
+        //Toast.makeText(this, "BEGIN Insert in DB movieDetails", Toast.LENGTH_LONG).show()
+
+        var d = controller.currentMovieDetail
+        var details = MovieDetail(d!!.id, d.title , d.voteAverage, d.voteCount, d.popularity,
+        d.poster_path, d.overView , d.releaseDate)
+
+        val movieDatails = ContentValues()
+        movieDatails.put(MoviesContract.Details.MOVIE_ID, d!!.id)
+        movieDatails.put(MoviesContract.Details.TITLE,  d.title)
+
+        movieDatails.put(MoviesContract.Details.VOTE_AVERAGE, d!!.voteAverage.toFloat())
+        movieDatails.put(MoviesContract.Details.VOTE_COUNT, d!!.voteCount)
+        movieDatails.put(MoviesContract.Details.POPULARITY, d!!.popularity)
+        movieDatails.put(MoviesContract.Details.POSTER_PATH, d!!.poster_path)
+        movieDatails.put(MoviesContract.Details.OVERVIEW, d!!.overView)
+        movieDatails.put(MoviesContract.Details.RESLEASE_DATE, d!!.releaseDate)
+
+        controller.contentResolver!!.insert(
+                MoviesContract.Details.CONTENT_URI,
+                movieDatails
+        )
+
+        //Toast.makeText(this, "Insert in DB movieDetails", Toast.LENGTH_LONG).show()
+        Log.i("Inserted movie ", controller.currentMovieDetail!!.title +" into db")
+
+    }
+
+
 
 }
 
