@@ -73,6 +73,9 @@ class MainFragment() : Fragment(), Parcelable {
 
     override fun onStart() {
         super.onStart()
+        gridView!!.visibility = GridView.VISIBLE
+
+        /*
         if (Controller.isNetworkAvailable(activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)) {
             gridView!!.visibility = GridView.VISIBLE
         } else {
@@ -84,7 +87,7 @@ class MainFragment() : Fragment(), Parcelable {
             }
             gridView!!.visibility = GridView.GONE
         }
-
+*/
 
         gridView!!.setOnScrollListener(object : MyOnScrollListener() {
             override fun onLoadMore(pages: Int, totalItemsCount: Int): Boolean {

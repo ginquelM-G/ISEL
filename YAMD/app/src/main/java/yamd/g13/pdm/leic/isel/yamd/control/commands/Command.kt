@@ -1,5 +1,6 @@
 package yamd.g13.pdm.leic.isel.yamd.control.commands
 
+import yamd.g13.pdm.leic.isel.yamd.control.Controller
 import yamd.g13.pdm.leic.isel.yamd.control.Endpoint
 import yamd.g13.pdm.leic.isel.yamd.control.HttpRequests
 
@@ -8,7 +9,7 @@ import yamd.g13.pdm.leic.isel.yamd.control.HttpRequests
  */
 abstract class Command {
 
-    abstract fun<T> parseResult(jsonResult: String): List<T>
+    abstract fun<T> parseResult(jsonResult: String, endpoint: Endpoint): List<T>
     abstract fun getUri(endpoint: Endpoint) : String
     companion object {
 
@@ -17,12 +18,20 @@ abstract class Command {
         private var initialized = false
         private val recentPaths = ArrayList<String>()
 
+        val categories = HashMap<Endpoint, String>()
+
         private fun initCommands() {
+
             commands.put(Endpoint.POPULAR, GetMovies())
             commands.put(Endpoint.NOW_PLAYING, GetMovies())
             commands.put(Endpoint.SEARCH, GetMovies())
             commands.put(Endpoint.UPCOMING, GetMovies())
             commands.put(Endpoint.MOVIE_DETAIL, GetMovieDetails())
+
+            categories.put(Endpoint.POPULAR, Controller.POPULAR_MOVIES)
+            categories.put(Endpoint.NOW_PLAYING, Controller.NOW_PLAYING_MOVIES)
+            categories.put(Endpoint.UPCOMING, Controller.UPCOMING_MOVIES)
+
             initialized = true
         }
 
@@ -36,9 +45,9 @@ abstract class Command {
             var url = command.getUri(endpoint) + endpoint.query + endpoint.nextPage()
             var currentUrl = command.getUri(endpoint) + endpoint.query + endpoint.getCurrentPage()
             if(recentPaths.contains(currentUrl))
-                return command.parseResult("")
+                return command.parseResult("", endpoint)
             recentPaths.add(currentUrl)
-            return command.parseResult(provider.get(url)[0])
+            return command.parseResult(provider.get(url)[0], endpoint)
         }
     }
 }

@@ -14,7 +14,7 @@ import android.widget.SearchView
 import kotlinx.android.synthetic.main.activity_main.*
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.*
-import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBox
+import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBundle
 import yamdb.g13.pdm.leic.isel.yamdb.view.MainFragment
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
@@ -24,18 +24,18 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     }
 
     override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        Controller.init(contentResolver, ContentValues())
+        Controller.init(contentResolver, ContentValues(), args)
         return Controller.getCursorLoader(this, id, args)
     }
 
     override fun onLoadFinished(loader: Loader<Cursor>?, data: Cursor?) {
         Controller.getDataFromCursor(loader, data)
-        loaderManager.destroyLoader(Controller.MOVIES_LST_LOADER)
+        loaderManager.destroyLoader(loader!!.id)
         data!!.close()
     }
 
-    private fun getBundle(endpoint: Endpoint) : Bundle{
-        var box = EndpointBox(endpoint, supportFragmentManager)
+    private fun getEndpointBundle(endpoint: Endpoint) : Bundle{
+        var box = EndpointBundle(endpoint, supportFragmentManager)
         var b = Bundle()
         b.putParcelable(Controller.ENDPOINT_KEY, box)
         return  b
@@ -46,15 +46,15 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     private val itemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_popular -> {
-                loaderManager.initLoader(Controller.MOVIES_LST_LOADER, getBundle(Endpoint.POPULAR), this)
+                loaderManager.initLoader(Controller.POPULAR_MOVIES_LOADER, getEndpointBundle(Endpoint.POPULAR), this)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_now_playing -> {
-                loaderManager.initLoader(Controller.MOVIES_LST_LOADER, getBundle(Endpoint.NOW_PLAYING), this)
+                loaderManager.initLoader(Controller.NOW_PLAYING_MOVIES_LOADER, getEndpointBundle(Endpoint.NOW_PLAYING), this)
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_upcoming -> {
-                loaderManager.initLoader(Controller.MOVIES_LST_LOADER, getBundle(Endpoint.UPCOMING), this)
+                loaderManager.initLoader(Controller.UPCAMING_MOVIES_LOADER, getEndpointBundle(Endpoint.UPCOMING), this)
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -64,10 +64,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        loaderManager.initLoader(Controller.CATEGORIES_LST_LOADER, null, this)
-
         if (savedInstanceState == null)
-            loaderManager.initLoader(Controller.MOVIES_LST_LOADER, getBundle(Endpoint.NOW_PLAYING), this)
+            loaderManager.initLoader(Controller.POPULAR_MOVIES_LOADER, getEndpointBundle(Endpoint.POPULAR), this)
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(itemSelectedListener)
 
@@ -117,5 +115,9 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         Controller.restoreState(supportFragmentManager)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        Controller.saveDataToDataBase(contentResolver, ContentValues())
+    }
 }
 

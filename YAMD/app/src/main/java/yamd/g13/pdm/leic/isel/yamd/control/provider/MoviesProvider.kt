@@ -2,6 +2,7 @@ package yamd.g13.pdm.leic.isel.yamd.control.provider
 
 import android.content.*
 import android.database.Cursor
+import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.text.TextUtils
@@ -26,32 +27,32 @@ class MoviesProvider : ContentProvider() {
 
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Movies.RESOURCE,
+                MoviesContract.MoviesTable.RESOURCE,
                 MOVIES_LST
         )
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Movies.RESOURCE + "/#",
+                MoviesContract.MoviesTable.RESOURCE + "/#",
                 MOVIE_ID
         )
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Details.RESOURCE,
+                MoviesContract.DetailsTable.RESOURCE,
                 DETAILS_LST
         )
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Details.RESOURCE + "/#",
+                MoviesContract.DetailsTable.RESOURCE + "/#",
                 DETAIL_ID
         )
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Categories.RESOURCE,
+                MoviesContract.CategoriesTable.RESOURCE,
                 CATEGORIES_LST
         )
         URI_MATCHER.addURI(
                 MoviesContract.AUTHORITY,
-                MoviesContract.Categories.RESOURCE + "/#",
+                MoviesContract.CategoriesTable.RESOURCE + "/#",
                 CATEGORY_ID
         )
     }
@@ -65,14 +66,21 @@ class MoviesProvider : ContentProvider() {
             CATEGORIES_LST -> DbSchema.Categories.TBL_NAME
             else -> throw badUri(uri)
         }
+        var newId = Long.MIN_VALUE
+        try {
+            val db = dbHelper!!.writableDatabase
+            newId = db.insert(table, null, values)
 
-        val db = dbHelper!!.writableDatabase
-        val newId = db.insert(table, null, values)
+            if (!inBatchMode.get())
+                context.contentResolver.notifyChange(uri, null)
+        }
+        catch (e:SQLiteConstraintException){
 
-        if (!inBatchMode.get())
-            context.contentResolver.notifyChange(uri, null)
+        }
+        finally {
+            return ContentUris.withAppendedId(uri, newId)
+        }
 
-        return ContentUris.withAppendedId(uri, newId)
     }
 
     override fun query(uri: Uri?, projection: Array<out String>?, selection: String?, selectionArgs: Array<out String>?, sortOrder: String?): Cursor {
@@ -83,7 +91,7 @@ class MoviesProvider : ContentProvider() {
             MOVIES_LST -> {
                 qbuilder.tables = DbSchema.Movies.TBL_NAME
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = MoviesContract.Movies.DEFAULT_SORT_ORDER
+                    sortOrder = MoviesContract.MoviesTable.DEFAULT_SORT_ORDER
                 }
             }
             MOVIE_ID -> {
@@ -93,7 +101,7 @@ class MoviesProvider : ContentProvider() {
             DETAILS_LST -> {
                 qbuilder.tables = DbSchema.Details.TBL_NAME
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = MoviesContract.Details.DEFAULT_SORT_ORDER
+                    sortOrder = MoviesContract.DetailsTable.DEFAULT_SORT_ORDER
                 }
             }
             DETAIL_ID -> {
@@ -103,7 +111,7 @@ class MoviesProvider : ContentProvider() {
             CATEGORIES_LST -> {
                 qbuilder.tables = DbSchema.Categories.TBL_NAME
                 if (TextUtils.isEmpty(sortOrder)) {
-                    sortOrder = MoviesContract.Categories.DEFAULT_SORT_ORDER
+                    sortOrder = MoviesContract.CategoriesTable.DEFAULT_SORT_ORDER
                 }
             }
             CATEGORY_ID -> {
@@ -166,12 +174,12 @@ class MoviesProvider : ContentProvider() {
 
     override fun getType(uri: Uri?): String {
         return when (URI_MATCHER.match(uri)) {
-            MOVIES_LST -> MoviesContract.Movies.CONTENT_TYPE
-            MOVIE_ID -> MoviesContract.Movies.CONTENT_ITEM_TYPE
-            CATEGORIES_LST -> MoviesContract.Categories.CONTENT_TYPE
-            CATEGORY_ID -> MoviesContract.Categories.CONTENT_ITEM_TYPE
-            DETAILS_LST -> MoviesContract.Details.CONTENT_TYPE
-            DETAIL_ID -> MoviesContract.Details.CONTENT_ITEM_TYPE
+            MOVIES_LST -> MoviesContract.MoviesTable.CONTENT_TYPE
+            MOVIE_ID -> MoviesContract.MoviesTable.CONTENT_ITEM_TYPE
+            CATEGORIES_LST -> MoviesContract.CategoriesTable.CONTENT_TYPE
+            CATEGORY_ID -> MoviesContract.CategoriesTable.CONTENT_ITEM_TYPE
+            DETAILS_LST -> MoviesContract.DetailsTable.CONTENT_TYPE
+            DETAIL_ID -> MoviesContract.DetailsTable.CONTENT_ITEM_TYPE
             else -> throw badUri(uri)
         }
     }

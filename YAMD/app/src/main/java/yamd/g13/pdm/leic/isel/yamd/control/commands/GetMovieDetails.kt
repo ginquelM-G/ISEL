@@ -9,7 +9,7 @@ import yamd.g13.pdm.leic.isel.yamd.model.MovieDetail
  * Created by tony_mendes on 28/11/2017.
  */
 class GetMovieDetails : Command(){
-    override fun<D> parseResult(jsonResult: String): List<D> {
+    override fun<D> parseResult(jsonResult: String, endpoint: Endpoint): List<D> {
         if(jsonResult.isEmpty()){
             return ArrayList<D>()
         }

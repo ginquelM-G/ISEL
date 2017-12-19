@@ -1,7 +1,6 @@
 package yamd.g13.pdm.leic.isel.yamd.control
 
 import android.app.Activity
-import android.app.FragmentController
 import android.content.*
 import android.content.res.Configuration
 import android.database.Cursor
@@ -13,20 +12,19 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.util.Log
-import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import android.widget.Toast
 import com.squareup.picasso.Picasso
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.commands.Command
-import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBox
+import yamd.g13.pdm.leic.isel.yamd.control.provider.DbAdapter
+import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBundle
 import yamd.g13.pdm.leic.isel.yamd.control.provider.MoviesContract
+import yamd.g13.pdm.leic.isel.yamd.model.Category
 import yamd.g13.pdm.leic.isel.yamd.model.Movie
 import yamd.g13.pdm.leic.isel.yamd.model.MovieDetail
-import yamdb.g13.pdm.leic.isel.yamdb.view.ImageAdapter
 import yamdb.g13.pdm.leic.isel.yamdb.view.MainFragment
 
 /**
@@ -43,8 +41,11 @@ object Controller{
     val ENDPOINT_KEY = "ENDPOINT"
     val cache = HashMap<Endpoint, List<Movie>>()
     val moviesDetail = HashMap<Int, MovieDetail>()
+
     var currentEndpoint = Endpoint.POPULAR
     var currentMovieDetail : MovieDetail? = null
+
+    var currentEndpointBundle: EndpointBundle? = null
 
     val MOVIES_LST_LOADER = 1
     val MOVIE_ID_LOADER = 2
@@ -53,52 +54,74 @@ object Controller{
     val CATEGORIES_LST_LOADER = 5
     val CATEGORY_ID_LOADER = 6
 
+    val POPULAR_MOVIES_LOADER = 7
+    val UPCAMING_MOVIES_LOADER = 8
+    val NOW_PLAYING_MOVIES_LOADER = 9
+
     val fragmentsMap = HashMap<Endpoint, MainFragment>()
 
     var contentResolver : ContentResolver? = null
+    var contentValues: ContentValues? = null
 
-    fun init(contentResolver : ContentResolver, contentValues: ContentValues){
+    val POPULAR_MOVIES = "popular"
+    val UPCOMING_MOVIES = "nowPlaying"
+    val NOW_PLAYING_MOVIES = "upcoming"
+
+    fun init(contentResolver : ContentResolver, contentValues: ContentValues, args: Bundle?){
+
+        if (args!=null){
+            currentEndpointBundle = args.getParcelable<EndpointBundle>(ENDPOINT_KEY)
+        }
+
         this.contentResolver = contentResolver
-        /*var categoryList = ArrayList<Category>(0)
-        categoryList.add(Category("popular films", "most viewed movies"))
-        categoryList.add(Category("up coming", "movies that will be in debut soon"))
-        categoryList.add(Category("now playing", "movies in theaters"))
+        this.contentValues = contentValues
+        /*
+        var categoryList = ArrayList<Category>(0)
+        categoryList.add(Category(POPULAR_MOVIES, "most viewed movies"))
+        categoryList.add(Category(UPCOMING_MOVIES, "movies that will be in debut soon"))
+        categoryList.add(Category(NOW_PLAYING_MOVIES, "movies in theaters"))
 
         DbAdapter.writeToCategories(contentResolver, contentValues, categoryList)*/
     }
 
     fun getCursorLoader(ctx: Context,id: Int, args: Bundle?): Loader<Cursor> {
+
+        var selectionArgs =  when (id) {
+            POPULAR_MOVIES_LOADER -> arrayOf(POPULAR_MOVIES)
+            NOW_PLAYING_MOVIES_LOADER -> arrayOf(NOW_PLAYING_MOVIES)
+            else -> arrayOf(UPCOMING_MOVIES)
+        }
         return when (id) {
-            MOVIES_LST_LOADER ->{
-                if (args!=null){
-                    var endpointBox = args.getParcelable<EndpointBox>(ENDPOINT_KEY)
-                    onNavigationItemSelected(endpointBox.endpoint, endpointBox.supportFragmentManager)
-                }
+
+            POPULAR_MOVIES_LOADER, NOW_PLAYING_MOVIES_LOADER, UPCAMING_MOVIES_LOADER->{
                 CursorLoader(
-                        ctx, MoviesContract.Movies.CONTENT_URI, MoviesContract.Movies.PROJECT_ALL,
-                        null,null,null
+                        ctx, MoviesContract.MoviesTable.CONTENT_URI, MoviesContract.MoviesTable.PROJECT_ALL,
+                        MoviesContract.MoviesTable.CATEGORY + "=?", selectionArgs,null
                 )
             }
+
             MOVIE_ID_LOADER ->CursorLoader(
-                    ctx, MoviesContract.Movies.CONTENT_URI, MoviesContract.Movies.PROJECT_ALL,
+                    ctx, MoviesContract.MoviesTable.CONTENT_URI, MoviesContract.MoviesTable.PROJECT_ALL,
                     null,null,null
             )
+
+
             DETAILS_LST_LOADER ->CursorLoader(
-                    ctx, MoviesContract.Details.CONTENT_URI, MoviesContract.Details.PROJECT_ALL,
+                    ctx, MoviesContract.DetailsTable.CONTENT_URI, MoviesContract.DetailsTable.PROJECT_ALL,
                     null,null,null
             )
             CATEGORY_ID_LOADER ->CursorLoader(
-                    ctx, MoviesContract.Details.CONTENT_URI, MoviesContract.Details.PROJECT_ALL,
+                    ctx, MoviesContract.DetailsTable.CONTENT_URI, MoviesContract.DetailsTable.PROJECT_ALL,
                     null,null,null
             )
             CATEGORIES_LST_LOADER ->
                 CursorLoader(
-                        ctx, MoviesContract.Categories.CONTENT_URI, MoviesContract.Categories.PROJECT_ALL,
+                        ctx, MoviesContract.CategoriesTable.CONTENT_URI, MoviesContract.CategoriesTable.PROJECT_ALL,
                         null,null,null
                 )
             DETAIL_ID_LOADER ->
                 CursorLoader(
-                        ctx, MoviesContract.Categories.CONTENT_URI, MoviesContract.Categories.PROJECT_ALL,
+                        ctx, MoviesContract.CategoriesTable.CONTENT_URI, MoviesContract.CategoriesTable.PROJECT_ALL,
                         null,null,null
                 )
             else ->
@@ -108,22 +131,29 @@ object Controller{
 
     fun getDataFromCursor(loader: Loader<Cursor>?, data: Cursor?) {
          when (loader!!.id) {
-            MOVIES_LST_LOADER ->{}
-            MOVIE_ID_LOADER ->{}
-            DETAILS_LST_LOADER ->{
-            }
-            CATEGORY_ID_LOADER ->{
+             POPULAR_MOVIES_LOADER, NOW_PLAYING_MOVIES_LOADER, UPCAMING_MOVIES_LOADER->{
+                var result = DbAdapter.readMoviesFromCursor(loader, data)
+                 if (!result.isEmpty()) {
+                     cache[currentEndpointBundle!!.endpoint] = result
+                 }
+                 if (currentEndpointBundle != null){
+                     onNavigationItemSelected(currentEndpointBundle!!.endpoint,
+                             currentEndpointBundle!!.supportFragmentManager)
+                 }
+             }
 
-            }
-            CATEGORIES_LST_LOADER ->{
+             CATEGORY_ID_LOADER ->{
+
+             }
+             CATEGORIES_LST_LOADER ->{
                 var s = ""
                 while (data!!.moveToNext()){
                     s = data.getString(2)
                 }
                 print(s)
-            }
-            DETAIL_ID_LOADER ->{}
-            else ->
+             }
+             DETAIL_ID_LOADER ->{}
+             else ->
                 throw IllegalArgumentException("unknown id: $loader!!.id")
         }
     }
@@ -158,6 +188,18 @@ object Controller{
                 .commit()
     }
 
+    fun saveDataToDataBase(contentResolver: ContentResolver, contentValues: ContentValues){
+        if(cache.containsKey(Endpoint.POPULAR)){
+            DbAdapter.writeToMovies(contentResolver, contentValues, cache[Endpoint.POPULAR]!!)
+        }
+        if(cache.containsKey(Endpoint.NOW_PLAYING)){
+            DbAdapter.writeToMovies(contentResolver, contentValues, cache[Endpoint.NOW_PLAYING]!!)
+        }
+        if(cache.containsKey(Endpoint.UPCOMING)){
+            DbAdapter.writeToMovies(contentResolver, contentValues, cache[Endpoint.UPCOMING]!!)
+        }
+    }
+
     fun restoreState(fragmentManager: FragmentManager) {
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, currentFragment)
@@ -178,10 +220,10 @@ object Controller{
     }
 
     fun getMoviesPosters():List<String>{
-        if(!cache.containsKey(currentEndpoint)){
-            cache[currentEndpoint] = ArrayList(0)
+        /*if(!cache.containsKey(currentEndpoint)){
+            cache[currentEndpoint] = DbAdapter.readMovies(contentResolver!!, contentValues!!)
             (cache[currentEndpoint] as ArrayList<Movie>).addAll(Command.execute(currentEndpoint))
-        }
+        }*/
         if(!cache.containsKey(currentEndpoint)){
             cache[currentEndpoint] = ArrayList(0)
             (cache[currentEndpoint] as ArrayList<Movie>).addAll(Command.execute(currentEndpoint))
@@ -238,18 +280,18 @@ object Controller{
         d.poster_path, d.overView , d.releaseDate)
 
         val movieDatails = ContentValues()
-        movieDatails.put(MoviesContract.Details.MOVIE_ID, d!!.id)
-        movieDatails.put(MoviesContract.Details.TITLE,  d.title)
+        movieDatails.put(MoviesContract.DetailsTable.MOVIE_ID, d!!.id)
+        movieDatails.put(MoviesContract.DetailsTable.TITLE,  d.title)
 
-        movieDatails.put(MoviesContract.Details.VOTE_AVERAGE, d!!.voteAverage.toFloat())
-        movieDatails.put(MoviesContract.Details.VOTE_COUNT, d!!.voteCount)
-        movieDatails.put(MoviesContract.Details.POPULARITY, d!!.popularity)
-        movieDatails.put(MoviesContract.Details.POSTER_PATH, d!!.poster_path)
-        movieDatails.put(MoviesContract.Details.OVERVIEW, d!!.overView)
-        movieDatails.put(MoviesContract.Details.RESLEASE_DATE, d!!.releaseDate)
+        movieDatails.put(MoviesContract.DetailsTable.VOTE_AVERAGE, d!!.voteAverage.toFloat())
+        movieDatails.put(MoviesContract.DetailsTable.VOTE_COUNT, d!!.voteCount)
+        movieDatails.put(MoviesContract.DetailsTable.POPULARITY, d!!.popularity)
+        movieDatails.put(MoviesContract.DetailsTable.POSTER_PATH, d!!.poster_path)
+        movieDatails.put(MoviesContract.DetailsTable.OVERVIEW, d!!.overView)
+        movieDatails.put(MoviesContract.DetailsTable.RESLEASE_DATE, d!!.releaseDate)
 
         controller.contentResolver!!.insert(
-                MoviesContract.Details.CONTENT_URI,
+                MoviesContract.DetailsTable.CONTENT_URI,
                 movieDatails
         )
 

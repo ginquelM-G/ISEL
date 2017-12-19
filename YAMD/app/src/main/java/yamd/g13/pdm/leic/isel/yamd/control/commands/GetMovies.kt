@@ -13,7 +13,7 @@ class GetMovies : Command() {
         return "${Controller.API_BASE_URL}${endpoint.getPath()}?api_key=${Controller.API_KEY}"
     }
 
-    override fun<M> parseResult(jsonResult: String): List<M> {
+    override fun<M> parseResult(jsonResult: String, endpoint: Endpoint): List<M> {
         if(jsonResult.isEmpty()){
             return ArrayList<M>()
         }
@@ -24,7 +24,7 @@ class GetMovies : Command() {
                 .asSequence()
                 .map { moviesArray.getJSONObject(it) }
                 .map {
-                    Movie(it.getInt("id"), it.getString("poster_path"))
+                    Movie(it.getInt("id"), it.getString("poster_path"), categories[endpoint]!!)
                 }
                 .toList() as List<M>
     }

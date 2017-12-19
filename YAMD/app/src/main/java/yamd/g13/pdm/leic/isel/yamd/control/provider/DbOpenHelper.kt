@@ -27,13 +27,13 @@ class DbOpenHelper(context: Context?) : SQLiteOpenHelper(context, DbSchema.DB_NA
         db.execSQL(DbSchema.Movies.DDL_CREATE_TABLE)
         db.execSQL(DbSchema.Details.DDL_CREATE_TABLE)
         /*db.execSQL(
-                "INSERT INTO " + DbSchema.Categories.TBL_NAME + " VALUES ("+ 1 + ", " + "\"popular\", \"popular films\");"
+                "INSERT INTO " + DbSchema.CategoriesTable.TBL_NAME + " VALUES ("+ 1 + ", " + "\"popular\", \"popular films\");"
         )
         db.execSQL(
-                "INSERT INTO " + DbSchema.Categories.TBL_NAME + " VALUES ("+ 2 +", " + "\"upcoming\", \"upcoming films\");"
+                "INSERT INTO " + DbSchema.CategoriesTable.TBL_NAME + " VALUES ("+ 2 +", " + "\"upcoming\", \"upcoming films\");"
         )
         db.execSQL(
-                "INSERT INTO " + DbSchema.Categories.TBL_NAME + " VALUES ("+ 3 +", " + "\"now_playing\", \"now playing films\");"
+                "INSERT INTO " + DbSchema.CategoriesTable.TBL_NAME + " VALUES ("+ 3 +", " + "\"now_playing\", \"now playing films\");"
         )*/
     }
 

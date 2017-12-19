@@ -10,7 +10,7 @@ import yamd.g13.pdm.leic.isel.yamd.control.Endpoint
 /**
  * Created by tony_mendes on 17/12/2017.
  */
-class EndpointBox(val endpoint: Endpoint, val supportFragmentManager: FragmentManager): Parcelable {
+class EndpointBundle(val endpoint: Endpoint, val supportFragmentManager: FragmentManager): Parcelable {
     override fun writeToParcel(dest: Parcel?, flags: Int) {
 
     }

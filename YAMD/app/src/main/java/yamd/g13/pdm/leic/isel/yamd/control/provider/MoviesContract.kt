@@ -16,7 +16,7 @@ object MoviesContract {
 
     val COL_ID = BaseColumns._ID
 
-    object Categories : BaseColumns {
+    object CategoriesTable : BaseColumns {
         val RESOURCE = "categories"
 
         val CONTENT_URI = Uri.withAppendedPath(
@@ -37,7 +37,7 @@ object MoviesContract {
     }
 
 
-    object Movies : BaseColumns {
+    object MoviesTable : BaseColumns {
         val RESOURCE = "movies"
 
         val CONTENT_URI = Uri.withAppendedPath(
@@ -58,7 +58,7 @@ object MoviesContract {
         val DEFAULT_SORT_ORDER = MOVIE_ID + " ASC"
     }
 
-    object Details : BaseColumns{
+    object DetailsTable : BaseColumns{
         val RESOURCE = "details"
 
         val CONTENT_URI = Uri.withAppendedPath(
