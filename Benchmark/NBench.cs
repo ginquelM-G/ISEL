@@ -8,13 +8,13 @@ namespace Benchmarking
 {
     public class NBench
     {
-        public static long Bench(Action handler, string title)
+        public static void Bench(Action handler, string title)
         {
             Console.WriteLine("########## BENCHMARKING: {0}", title);
-            return Perform(handler, 1000, 10);
+            Perform(handler, 1000, 10);
         }
 
-        private static long Perform(Action handler, int time, int iters)
+        private static void Perform(Action handler, int time, int iters)
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();
@@ -31,7 +31,6 @@ namespace Benchmarking
                 GC.Collect();
             }
             Console.WriteLine("============ BEST ===> {0 } ops/sec", maxThroughput);
-            return maxThroughput;
         }
 
         private static Result CallWhile(Action handler, int time)

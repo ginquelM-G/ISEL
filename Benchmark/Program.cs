@@ -1,29 +1,30 @@
-﻿using System;
+﻿using Benchmarking;
 using HtmlEmit;
 using HtmlReflect;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MovHubDb.Model;
 using MovHubDb;
+using MovHubDb.Model;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Benchmarking
 {
-    [TestClass]
-    public class UnitTest1
+    class Program
     {
         static readonly int SIZE = 200;
         static MovieSearchItem[] moviesApi = new TheMovieDbClient().Search("it", 1);
         static MovieSearchItem[] movies = new MovieSearchItem[SIZE];
 
-        [TestMethod]
-        public void TestNumOpPerSec()
+        static void Main(string[] args)
         {
             populate(ref movies);
-            long opEmit = NBench.Bench(BenchEmit, "Emit");
-            long opReflect = NBench.Bench(BenchReflect, "Reflect");
-            Console.WriteLine("Emit: {0}\nReflect: {1}", opEmit, opReflect);
-            Assert.IsTrue(opEmit > opReflect);
-        }
 
+            NBench.Bench(Program.BenchReflect, "Reflect");
+            NBench.Bench(Program.BenchEmit, "Emit");
+            Console.ReadKey();
+        }
 
         public static void BenchEmit()
         {
@@ -37,9 +38,10 @@ namespace Benchmarking
             string htmlReflect = reflect.ToHtml(movies);
         }
 
-        private void populate(ref MovieSearchItem[] movies)
+        private static void populate(ref MovieSearchItem[] movies)
         {
-            for (int i = 0; i < SIZE; i++) {
+            for (int i = 0; i < SIZE; i++)
+            {
                 movies[i] = new MovieSearchItem { Id = i + 100, Title = "Mulholland Drive", ReleaseDate = "2001-05-16", VoteAverage = 7.7 };
             }
         }
