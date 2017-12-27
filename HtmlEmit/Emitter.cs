@@ -194,10 +194,15 @@ namespace HtmlEmit
 
         public string ToHtml<T>(IEnumerable<T> arr)
         {
+            IHtml emit = ObjPropsToString(arr);
+
+            if (emit.GetType() == typeof(HtmlFormatterForSequenceOf<T>))
+            {
+                return emit.Html(arr);
+            }
             string table = "<table class='table table-hover'>{0}{1}</table>";
             string tbody = "<tbody>";
 
-            IHtml emit = ObjPropsToString(arr);
             string thead = emit.Thead(typeof(T));
             foreach (T o in arr)
             {
@@ -230,9 +235,13 @@ namespace HtmlEmit
         public Emitter ForSequenceOf<T>(Func<IEnumerable<T>, string> transf)
         {
             Type t = typeof(Func<>);
-            cachedTypes.Add(t, new HtmlFormatterForSequenceOf<T>(transf));
+            if (cachedTypes.ContainsKey(t))
+                cachedTypes[t] = new HtmlFormatterForSequenceOf<T>(transf);
+            else
+                cachedTypes.Add(t, new HtmlFormatterForSequenceOf<T>(transf));
             return this;
         }
+
         private class HtmlFormatterForTypeDetails<T> : IHtml
         {
 
@@ -282,7 +291,7 @@ namespace HtmlEmit
 
         private class HtmlFormatterForSequenceOf<T> : IHtml
         {
-            private Func<IEnumerable<T>, string> transf;
+            private readonly Func<IEnumerable<T>, string> transf;
 
             public HtmlFormatterForSequenceOf(Func<IEnumerable<T>, string> transf)
             {

@@ -57,16 +57,16 @@ namespace HtmlEmitTest
         public void ForSequenceOfTest()
         {
             Emitter html = new Emitter();
-            html.ForSequenceOf<MovieSearchItem>(stds =>
+            html.ForSequenceOf<MovieSearchItem>(movs =>
             {
-                string liIds = stds.Aggregate("", (prev, mov) => prev + "<li>" + mov.Id + "</li>");
+                string liIds = movs.Aggregate("", (prev, mov) => prev + "<li>" + mov.Id + "</li>");
                 return "<h1>Movie Ids</h1><ul>" + liIds + "</ul>";
             });
 
             TheMovieDbClient client = new TheMovieDbClient();
             MovieSearchItem[] res = client.Search("drive", 1);
-            string htmlatual = html.ToHtml<MovieSearchItem>(new MovieSearchItem[] { res[0] });
-            string expected = "<h1>Movie Ids</h1><ul><li>64690</li></ul>";
+            string htmlatual = html.ToHtml<MovieSearchItem>(res.Take(2));
+            string expected = "<h1>Movie Ids</h1><ul><li>64690</li><li>1018</li></ul>";
             Assert.AreEqual(expected, htmlatual);
         }
     }
