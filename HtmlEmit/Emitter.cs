@@ -51,9 +51,10 @@ namespace HtmlEmit
         {
             IHtml objHtml;
             Type klass = obj.GetType();
-            if (!cachedTypes.TryGetValue(klass, out objHtml) &&
-                !cachedTypes.TryGetValue(typeof(IEnumerable<>), out objHtml) &&
-                !cachedTypes.TryGetValue(typeof(Func<>), out objHtml))
+            if (!cachedTypes.TryGetValue(typeof(Func<>), out objHtml) &&
+                !cachedTypes.TryGetValue(klass, out objHtml) &&
+                !cachedTypes.TryGetValue(typeof(IEnumerable<>), out objHtml))
+                
             {
                 objHtml = EmitHtml(klass);
                 cachedTypes.Add(klass, objHtml);
