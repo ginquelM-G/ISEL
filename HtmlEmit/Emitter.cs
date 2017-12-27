@@ -8,6 +8,7 @@ namespace HtmlEmit
 {
     interface IHtml
     {
+        string Thead(object target);
         string Html(object target);
     }
 
@@ -34,7 +35,7 @@ namespace HtmlEmit
         }
 
         public abstract string Html(object target);
-
+        public abstract string Thead(object target);
     }
 
 
@@ -50,7 +51,9 @@ namespace HtmlEmit
         {
             IHtml objHtml;
             Type klass = obj.GetType();
-            if (!cachedTypes.TryGetValue(klass, out objHtml))
+            if (!cachedTypes.TryGetValue(klass, out objHtml) &&
+                !cachedTypes.TryGetValue(typeof(IEnumerable<>), out objHtml) &&
+                !cachedTypes.TryGetValue(typeof(Func<>), out objHtml))
             {
                 objHtml = EmitHtml(klass);
                 cachedTypes.Add(klass, objHtml);
@@ -80,8 +83,16 @@ namespace HtmlEmit
                 new Type[] { typeof(object) }
                 );
 
+            MethodBuilder mBuilder = tb.DefineMethod(
+                "Thead",
+                MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.ReuseSlot,
+                typeof(string),
+                new Type[] { typeof(object) }
+                );
+
+
             ILGenerator il = methodBuilder.GetILGenerator();
-            
+       
             Type elementType = klass;
             if (klass.IsArray)
                 elementType = klass.GetElementType();
@@ -151,9 +162,29 @@ namespace HtmlEmit
             il.Emit(OpCodes.Call, concat);
             il.Emit(OpCodes.Ret);              // ret
 
+            ILGenerator ilGen = mBuilder.GetILGenerator();
+            ilGen.Emit(OpCodes.Ldstr, "<thead><tr>");
+            foreach (PropertyInfo p in ps)
+            {
+                if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
+                ilGen.Emit(OpCodes.Ldstr, "<th>");
+                ilGen.Emit(OpCodes.Call, concat);
+                ilGen.Emit(OpCodes.Ldstr, p.Name);
+                ilGen.Emit(OpCodes.Call, concat);
+                ilGen.Emit(OpCodes.Ldstr, "</th>");
+                ilGen.Emit(OpCodes.Call, concat);
+            }
+            ilGen.Emit(OpCodes.Ldstr, "</tr></thead>");
+            ilGen.Emit(OpCodes.Call, concat);
+            ilGen.Emit(OpCodes.Ret);              // ret
+
             Type t = tb.CreateType();
             ab.Save(aName.Name + ".dll");
             return (IHtml)Activator.CreateInstance(t);
+
+
+            
+
         }
 
         public string ToHtml(object obj)
@@ -164,13 +195,12 @@ namespace HtmlEmit
         public string ToHtml<T>(IEnumerable<T> arr)
         {
             string table = "<table class='table table-hover'>{0}{1}</table>";
-            string thead = ConstructTableHead(typeof(T));
-
             string tbody = "<tbody>";
+
             IHtml emit = ObjPropsToString(arr);
+            string thead = emit.Thead(typeof(T));
             foreach (T o in arr)
             {
-     
                 tbody += emit.Html(o);
             }
             tbody += "</tbody>";
@@ -178,39 +208,37 @@ namespace HtmlEmit
             return String.Format(table, thead, tbody);
         }
 
-        private string ConstructTableHead(Type type)
-        {
-            string str = "<thead><tr>";
-            string th = "<th>{0}</th>";
-
-            foreach (PropertyInfo p in type.GetProperties())
-            {
-                if (p.GetCustomAttribute(typeof(HtmlIgnoreAttribute)) != null) continue;
-                str += String.Format(th, p.Name);
-            }
-            return str + "</tr></thead>";
-        }
+    
 
         public Emitter ForTypeDetails<T>(Func<T, string> formatter)
         {
             Type t = typeof(T);
-            cachedTypes.Add(t, new HtmlFormatter<T>(formatter));
+            if (cachedTypes.ContainsKey(t))
+                cachedTypes[t] = new HtmlFormatterForTypeDetails<T>(formatter);
+            else
+                cachedTypes.Add(t, new HtmlFormatterForTypeDetails<T>(formatter));
             return this;
         }
 
         public Emitter ForTypeInTable<T>(IEnumerable<string> headers, Func<T, string> transf)
         {
-            Type t = typeof(T);
+            Type t = typeof(IEnumerable<>);
             cachedTypes.Add(t, new HtmlFormatterTypeInTable<T>(headers, transf));
             return this;
         }
 
-        class HtmlFormatter<T> : IHtml
+        public Emitter ForSequenceOf<T>(Func<IEnumerable<T>, string> transf)
+        {
+            Type t = typeof(Func<>);
+            cachedTypes.Add(t, new HtmlFormatterForSequenceOf<T>(transf));
+            return this;
+        }
+        private class HtmlFormatterForTypeDetails<T> : IHtml
         {
 
             Func<T, string> formatter;
 
-            public HtmlFormatter(Func<T, string> f)
+            public HtmlFormatterForTypeDetails(Func<T, string> f)
             {
                 formatter = f;
             }
@@ -220,22 +248,55 @@ namespace HtmlEmit
                 return formatter((T)o);
             }
 
+            public string Thead(object target)
+            {
+                throw new NotImplementedException();
+            }
         }
 
         private class HtmlFormatterTypeInTable<T> : IHtml
         {
-            private IEnumerable<string> headers;
+            private string thead = "<thead>{0}</thead>";
             private Func<T, string> transf;
 
             public HtmlFormatterTypeInTable(IEnumerable<string> headers, Func<T, string> transf)
             {
-                this.headers = headers;
+                string h = "";
+                foreach (string s in headers)
+                    h += String.Format("<th>{0}</th>", s);
+                h = String.Format("<tr>{0}</tr>", h);
+                this.thead = String.Format(thead, h);
                 this.transf = transf;
             }
 
             public string Html(object target)
             {
                 return transf((T)target);
+            }
+
+            public string Thead(object target)
+            {
+                return thead;
+            }
+        }
+
+        private class HtmlFormatterForSequenceOf<T> : IHtml
+        {
+            private Func<IEnumerable<T>, string> transf;
+
+            public HtmlFormatterForSequenceOf(Func<IEnumerable<T>, string> transf)
+            {
+                this.transf = transf;
+            }
+
+            public string Html(object target)
+            {
+                return transf((IEnumerable<T>)target);
+            }
+
+            public string Thead(object target)
+            {
+                return "";
             }
         }
     }

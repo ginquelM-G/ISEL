@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking", "Benchmarkin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlEmitTest", "HtmlEmitTest\HtmlEmitTest.csproj", "{ED9182C3-D16F-4749-81A1-BF7D8D027EC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlEmitTest2", "HtmlEmitTest2\HtmlEmitTest2.csproj", "{FF232A95-7609-4361-A380-53C8B6C3C72F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,10 +54,6 @@ Global
 		{ED9182C3-D16F-4749-81A1-BF7D8D027EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED9182C3-D16F-4749-81A1-BF7D8D027EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED9182C3-D16F-4749-81A1-BF7D8D027EC7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF232A95-7609-4361-A380-53C8B6C3C72F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF232A95-7609-4361-A380-53C8B6C3C72F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF232A95-7609-4361-A380-53C8B6C3C72F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF232A95-7609-4361-A380-53C8B6C3C72F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
