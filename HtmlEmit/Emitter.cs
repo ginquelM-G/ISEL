@@ -236,10 +236,7 @@ namespace HtmlEmit
         public Emitter ForSequenceOf<T>(Func<IEnumerable<T>, string> transf)
         {
             Type t = typeof(Func<>);
-            if (cachedTypes.ContainsKey(t))
-                cachedTypes[t] = new HtmlFormatterForSequenceOf<T>(transf);
-            else
-                cachedTypes.Add(t, new HtmlFormatterForSequenceOf<T>(transf));
+            cachedTypes.Add(t, new HtmlFormatterForSequenceOf<T>(transf));
             return this;
         }
 
