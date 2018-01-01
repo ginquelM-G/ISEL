@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router() 
-const movieService = require('./movieService')()
+const movieService = require('../services/movieService')()
 
 
 module.exports = router

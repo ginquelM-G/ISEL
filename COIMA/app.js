@@ -7,7 +7,7 @@ const passport = require('passport')
 const session = require('express-session')
 const bodyParser = require('body-parser')
 
-const service = require('./routes/movieService')
+const service = require('./services/movieService')
 const express = require('express')
 const movieRouter = require('./routes/movieRoutes')
 const userRouter = require('./routes/userRoutes')
