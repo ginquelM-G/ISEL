@@ -12,7 +12,10 @@ router.get('/sign_up', function(req, res, next) {
 })
 
 router.get('/login', function(req, res, next) {
-  res.render('login', {layout: false})
+  const ctx = { layout: false }
+  const msg = req.flash('loginError')
+  if(msg)  ctx.loginError = {message: msg}
+  res.render('login', ctx)
 })
 
 
@@ -20,7 +23,12 @@ router.post('/login', (req, resp, next)=>{
   //console.log(req.body)
   userService.authenticate(req.body.username, req.body.password, (err, user, info)=>{
     if(err) return next(err)
-    if(info) return next(new Error(info))
+    //if(info) return next(new Error(info))
+    if(info) {
+      // gravar mensagem de erro
+      req.flash('loginError', info)
+      return resp.redirect('/login')
+    }
     req.logIn(user, (err)=>{
       if(err) return next(err)
       resp.redirect('/')

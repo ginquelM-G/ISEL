@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const flashM = require('connect-flash')
 
 const service = require('./services/movieService')
 const express = require('express')
@@ -38,6 +39,7 @@ router.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: tr
 */
 router.use(passport.initialize()) // is invoked on each request and is the one that call serializeUser to load the user id to req.user
 router.use(passport.session()) // Obtem da sessão user id -> deserialize(id) -> user -> req.user
+router.use(flashM()) // Flash Message
 
 router.use(userRouter)
 router.use(classicsRouter)
