@@ -1,27 +1,63 @@
 <html>
     <head>
+        <title>MOVIE DETAILS</title>
+         <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css">
+        <script>
+            const movieDetailsFrontend = {
+                details: null,
+                txtComment: null,
 
+                onload: function(){
+                    details = document.getElementById('comments')
+                    txtComment = document.getElementById('txtAddedComment')
+                },
+
+                AddComment: function(){
+                   details.innerHTML += txtComment.value+'  <button onclick="movieDetailsFrontend.AddComment()" class="btn-sm btn-primary">reply</button>'
+                    // details.innerHTML += '<p>'+txtComment.value+'</p>
+                },
+
+                addReply: function(){
+                      details.innerHTML += '<p>'+txtComment.value+'</p>'
+                }
+
+            }
+            window.onload = movieDetailsFrontend.onload
+        </script>
     </head>
+
+
    <body>
-     
+       <br><br>
+       <div style="background-color:black;color:white;paddind:20px;clear: left;height:250px">
+            <p style="float: left;"><img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250" hspace="60px"/><br></p>
+            {{!-- <p style="float: left;"><img src="http://placekitten.com/g/200/200" height="200" width="200" border="1px"></p> --}}
+            <p>
+                <br>Movie Id: {{id}}<br>
+                <br>Title: {{original_title}}<br>
+                <br>Overview: {{overview}} <br>
+                <br>Director: {{director}}
+            </p>
+        </div>
         {{!--<p><img src='https://image.tmdb.org/t/p/original/stQoHvo0q6ZcEkji2Z1wlAxKnDq.jpg' width="250" height="250"/><br></p>--}}
-        <p><img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250"/><br></p>
+        {{!-- <p><img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250"/><br></p> --}}
        
-        <ul>
+        {{!-- <ul>
             <li>Id: {{id}}</li>
             <li>Title: {{original_title}}</li>
             <li>Overview: {{overview}}</li>  
             <li>Director: {{director}}</p></li>      
         </ul>
-
+ --}}
 
         {{!--<p><b>Director:</b> {{director}}</p>--}}
-        <table>
+        <div class="container" style="background-color:antiquewhite;color:Black;padding:0px;">
+        <table class="container" aria-colspan="40" >
             <tr>
                 <th>Character</th>
                 <th>Name</th>
             </tr>
-        {{#each cast}}
+           {{#each cast}}
                 <tr>
                     <td>{{character}}</td>
                     <td>
@@ -33,5 +69,62 @@
                 </tr>
             {{/each}}
         </table>
+        </div>
+
+        <div class="container">
+            <h2><br>Text area for comments</h2>
+            {{!--<p>Text area for comments:</p>
+            <form>
+                <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea class="form-control" rows="5" id="txtAddedComment"></textarea>
+                <button onclick="movieDetailsFrontend.AddComment()">Submit Comment</button>
+                </div>
+            </form> --}}
+            <table id='comments'>
+                {{!-- <p>...</p> --}}
+                
+            </table>
+            <button onclick="movieDetailsFrontend.AddComment()">Submit Comment</button>
+            <input id='txtAddedComment' type="text">
+            {{!-- <input id="pdffile" style="visibility: visible;" name="file" type="file" /> --}}
+        </div>
+        
+        <br>
+        <div class="container">
+            <h2>Commets</h2>
+            <p>Area to commets about the movie</p><br>
+            <div class="media">
+                <div class="media-left">
+                    {{!-- <img src="../views/image/avatar.png" class="media-object" style="width:45px"> --}}
+                    <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px"/>
+                    {{!-- <p><img src='../views/image/avatar.png' width="250" height="250"/><br></p> --}}
+                </div>
+
+            
+                <div class="media-body">
+                    <h4 class="media-heading">John <small><i>Posted on February 19, 2016</i></small></h4>
+                    <p>LOOL nice movie, yes it's</p>
+                
+           
+
+                    <!--Nested media object -->
+                    <div class="media">
+                        <div class="media-left">
+                            <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px"/>
+                        </div>
+
+                    
+                        <div class="media-body">
+                            <h4 class="media-heading">Ana <small><i>Posted on February 19, 2016</i></small></h4>
+                            <p>GUN, ngrateice movie, yes it's</p>
+                        </div>
+                    </div>
+
+               </div>
+             </div>
+        </div>
+
+       <br><br>
     </body>
 </html>
