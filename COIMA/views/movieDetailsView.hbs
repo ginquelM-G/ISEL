@@ -1,31 +1,6 @@
 <html>
     <head>
-        {{!-- <title>MOVIE DETAILS</title>
-         <link rel="stylesheet" href="../public/stylesheets/bootstrap.min.css"> --}}
-        {{!-- <script src="../public/javascripts/movieDetailsView.js" type="text/javascript">
-            const movieDetailsFrontend = {
-                details: null,
-                txtComment: null,
-
-                onload: function(){
-                    details = document.getElementById('comments')
-                    txtComment = document.getElementById('txtAddedComment')
-                },
-
-                AddComment: function(){
-                   details.innerHTML += '<br>'+txtComment.value+'  <button onclick="movieDetailsFrontend.AddComment()" class="btn-sm btn-primary">reply</button>'
-                    // details.innerHTML += '<p>'+txtComment.value+'</p>
-                },
-
-                addReply: function(){
-                      details.innerHTML += '<p>'+txtComment.value+'</p>'
-                }
-
-            }
-            window.onload = movieDetailsFrontend.onload
-        </script> --}}
     </head>
-
 
    <body>
        <br><br>
@@ -73,69 +48,77 @@
 
 
 
-        <div class='divAddComment2'>
-            <input type="submit" value="Fav" class='btn'>
-        </div>
+        
 
-        <div class="divAddComment">
-            <h2><br>Text area for comments</h2>
+        <div class="divBtComment">
+            <h2><br>Leave your comments</h2>
              <form>
                 <div class="form-group">
-                <label for="usr">Comments:</label>
-                <input type="text" class="form-control" id="txtAddedComment">
+                {{!-- <label for="usr">Comments:</label> --}}
+                <input type="text" class="form-control" id="inputTxtComment">
                 </div>
              </form>
              <input type="submit" value="Submit" class='btn'>
-
-            <table id='comments'>
-                 {{!-- <p>...</p> --}}
-            </table>
-             
             {{!-- <button onclick="addComment()">Submit Comment</button> --}}
             {{!-- <input id='txtAddedComment' type="text"> --}}
             {{!-- <input id="pdffile" style="visibility: visible;" name="file" type="file" /> --}}
+
+            <div id="divAddComment" style="visibility: hidden;">
+                <div class="media">
+                    <div class="media-left">
+                        <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px"/>
+                    </div>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">UserName <small><i id='postDate'></i></small></h4>
+                        <p id='txtAdded'>...</p>
+                        <input type="submit" value="reply" class='btnReplyI btn-primary btn-xs'>
+                        {{!-- <button type="button" id="btnReplyB">ReplyB</button> --}}
+                        {{!-- <input type="submit" value="reply" class='btnReply btn-primary btn-xs'>
+                        <button type="button" class="btn btn-default btn-sm">ReplyB2</button> --}}
+                        <hr>
+                    </div>
+                </div>
+            </div>
+
+          <div id="divAddCommentEmpty">
+            {{!-- <p>__________________----___________</p> --}}
+          </div>
+
+
         </div>
+
+
+
+
         
-
-
-
-
-        <br>
+        <!--Nested media object -->
+        {{!-- <br>
         <div class="container">
-            <h2>Commets</h2>
-            <p>Area to commets about the movie</p><br>
             <div class="media">
                 <div class="media-left">
-                    {{!-- <img src="../views/image/avatar.png" class="media-object" style="width:45px"> --}}
                     <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px"/>
-                    {{!-- <p><img src='../views/image/avatar.png' width="250" height="250"/><br></p> --}}
                 </div>
-
             
                 <div class="media-body">
                     <h4 class="media-heading">John <small><i>Posted on February 19, 2016</i></small></h4>
-                    <p>LOOL nice movie, yes it's</p>
+                    <p>LOOL nice movie, yes it's</p><hr>
                 
-           
-
                     <!--Nested media object -->
                     <div class="media">
                         <div class="media-left">
                             <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px"/>
                         </div>
-
                     
                         <div class="media-body">
                             <h4 class="media-heading">Ana <small><i>Posted on February 19, 2016</i></small></h4>
-                            <p>GUN, ngrateice movie, yes it's</p>
+                            <p>GUN, ngrateice movie, yes it's</p><hr>
                         </div>
                     </div>
 
                </div>
              </div>
         </div>
-
-
 
 
         <div class="container">
@@ -147,7 +130,7 @@
 
                 <div class="media-body">
                     <h4 class="media-heading">Maria<small><i>Posted on February 19, 2016</i></small></h4>
-                    <p>GUN, ngrateice movie, yes it's</p>
+                    <p>GUN, ngrateice movie, yes it's</p><hr>
                 </div>
             </div>
         </div>
@@ -158,10 +141,6 @@
         <div id="demo">
             <h2>The XMLHttpRequest Object</h2>
             <button type="button" onclick="loadDoc()" id='bt'>Change Content</button>
-        </div>
-
-
-    
-    <br><br>
+        </div> --}}
     </body>
 </html>

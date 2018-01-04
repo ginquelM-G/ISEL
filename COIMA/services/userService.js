@@ -16,7 +16,9 @@ module.exports ={
     'find': find,
     'authenticate': authenticate,
     'save': save,
-    'createNewFileInCouchDB': createNewFileInCouchDB
+    'createNewFileInCouchDB': createNewFileInCouchDB,
+    'createACommentFile': createACommentFile,
+    'getUserName': getUserName
 }
 
 
@@ -64,7 +66,7 @@ function save(user, cb){
 
 /*
 * Creating New Documents.
-* Can be createt new documents by using the insert method..
+* Can be created new documents using the put method..
 */
 function createNewFileInCouchDB(reqBody, cb){
     var db_name = reqBody.username.toString() 
@@ -96,4 +98,44 @@ function createNewFileInCouchDB(reqBody, cb){
         })
         console.log('end callbakc')
     })
+}
+
+
+function createACommentFile(reqBody, cb){
+    var db_name = reqBody.username.toString() 
+    console.log('body: %j', reqBody)
+    //const path = dbUsers + '/' + reqBody.username.toString()
+    const path = dbUsers + '/allComments' 
+    var options ={
+        url: dbUsers + db_name,
+        method: "PUT",
+        Headers: {"Content-Type": "application/json"},
+        json: true,
+        //body: JSON.stringify(user)
+        body: {
+            "comment":[]
+        }
+    }
+    var commentFileExist = false
+    request(path, function(err, res, body) {
+        if(err) cb(err)
+        console.log('### %j' + body)
+        if(body==!undefined) commentFileExist=true
+        cb()
+    })  
+    if(!commentFileExist)
+    request(dbUsers, function(err, resp, body) {
+        request.put(path, options, function(err, res, body) {
+                if(err) cb(err)
+                //console.log('### %j' + body)
+                cb()
+        })
+        console.log('end callbakc')
+    })
+}
+
+
+function getUserName(){
+    console.log('Name: ' +  reqBody.username.toString() )
+    return reqBody.username.toString() 
 }

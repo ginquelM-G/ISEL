@@ -39,11 +39,20 @@ router.post('/login', (req, resp, next)=>{
 
 router.post('/sign_up', (req, resp, next)=>{
 
+
+  userService.createACommentFile(req.body, (err) =>{
+    if(err) return next(err)
+    console.log('\n\nCreated a Comment File In CouchDB if doesn\'t exists.')
+    //resp.redirect('/login')
+  })
+
   userService.createNewFileInCouchDB(req.body, (err) =>{
       if(err) return next(err)
       console.log('\n\nCreated a New File In CouchDB.')
       resp.redirect('/login')
   })
+
+  
   /*
   userService.authenticate(req.body.username, req.body.password, (err, user, info)=>{
     if(err) return next(err)
