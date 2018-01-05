@@ -1,23 +1,32 @@
 package yamd.g13.pdm.leic.isel.yamd.view
 
 import android.app.LoaderManager
-import android.content.ContentValues
-import android.content.Intent
-import android.content.Loader
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
+import android.content.*
 import android.database.Cursor
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.SearchView
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_detail.*
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.*
+import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util.Companion.scheduleJob
+import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.service.OurJobService
 import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBundle
 import yamdb.g13.pdm.leic.isel.yamdb.view.MainFragment
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> {
+
+
+
+
 
     override fun onLoaderReset(loader: Loader<Cursor>?) {
         //adapter.changeCursor(null)
@@ -69,9 +78,19 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         setContentView(R.layout.activity_main)
         navigation.setOnNavigationItemSelectedListener(itemSelectedListener)
 
+        var checkBox = findViewById<CheckBox>(R.id.follow)
+        //var movieDescription = activity.findViewById<TextView>(R.id.movie_overview)
+        //var checkBox = follow as CheckBox
 
+        if(checkBox == null) Log.e("ERROR", "dfhgjdskkljfhjksk")
 
+        if(checkBox != null && checkBox!!.isChecked){
+           // scheduleJob()
+        }
+        scheduleJob(applicationContext, this)
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
