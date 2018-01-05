@@ -10,6 +10,7 @@ import android.os.AsyncTask
 import android.os.PersistableBundle
 import android.widget.Toast
 import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.service.OurJobService
+import yamd.g13.pdm.leic.isel.yamd.control.notification.FollowMovieNotification
 
 
 /**
@@ -32,6 +33,7 @@ class Util {
 
 
         fun scheduleJob(ctx: Context, activity: Activity){
+            FollowMovieNotification.notify(ctx, "Simple notification tests", 0)
             System.out.println("HEllo")
             //tO Use extra
             var extras: PersistableBundle = PersistableBundle()

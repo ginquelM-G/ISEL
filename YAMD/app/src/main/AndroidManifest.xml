@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -29,20 +30,18 @@
         <activity
             android:name=".view.AboutActivity"
             android:label="@string/title_activity_about"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <provider
-            android:authorities="yamd.g13.pdm.leic.isel.yamd.control.provider"
             android:name=".control.provider.MoviesProvider"
-            android:exported="false"
-            />
+            android:authorities="yamd.g13.pdm.leic.isel.yamd.control.provider"
+            android:exported="false" />
 
         <service
             android:name=".control.jobscheduler.service.OurJobService"
             android:enabled="true"
             android:exported="false"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
     </application>
 
 </manifest>

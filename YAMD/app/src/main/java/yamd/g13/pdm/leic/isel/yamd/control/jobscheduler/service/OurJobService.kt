@@ -17,7 +17,7 @@ import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util
 import java.net.URI
 
 /**
- *  Created by Ginquel on 28/12/2017.
+ *  Created by User01 on 28/12/2017.
  */
 class OurJobService : JobService() {
 
