@@ -33,7 +33,7 @@ class Util {
 
 
         fun scheduleJob(ctx: Context, activity: Activity){
-            FollowMovieNotification.notify(ctx, "Simple notification tests", 0)
+            //FollowMovieNotification.notify(ctx, "Simple notification tests", 0)
             System.out.println("HEllo")
             //tO Use extra
             var extras: PersistableBundle = PersistableBundle()

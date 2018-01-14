@@ -39,7 +39,7 @@ class DetailActivity : AppCompatActivity() {
 
         if(checkBox != null && checkBox!!.isChecked){
             Toast.makeText(this, "IF scheduleJob", Toast.LENGTH_SHORT).show()
-            scheduleJob()
+            //scheduleJob()
         }
     }
 
