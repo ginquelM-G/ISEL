@@ -26,21 +26,7 @@ class DetailActivity : AppCompatActivity() {
         Controller.setMovieDetailViews(this, this)
         //onInsert(Controller.getController())
 
-        checkBox = findViewById<CheckBox>(R.id.follow)
-        //var movieDescription = activity.findViewById<TextView>(R.id.movie_overview)
-        //var checkBox = follow as CheckBox
 
-        if(checkBox == null) Log.e("ERROR", "dfhgjdskkljfhjksk")
-
-        checkBox!!.setOnClickListener {
-            Toast.makeText(this, "checkBos => isChecked: " + checkBox!!.isChecked, Toast.LENGTH_SHORT).show()
-            //scheduleJob()
-        }
-
-        if(checkBox != null && checkBox!!.isChecked){
-            Toast.makeText(this, "IF scheduleJob", Toast.LENGTH_SHORT).show()
-            //scheduleJob()
-        }
     }
 
 

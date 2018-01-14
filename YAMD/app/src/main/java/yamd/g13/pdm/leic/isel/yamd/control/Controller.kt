@@ -12,17 +12,15 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
 import com.squareup.picasso.Picasso
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.commands.Command
 import yamd.g13.pdm.leic.isel.yamd.control.provider.DbAdapter
 import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBundle
 import yamd.g13.pdm.leic.isel.yamd.control.provider.MoviesContract
-import yamd.g13.pdm.leic.isel.yamd.model.Category
 import yamd.g13.pdm.leic.isel.yamd.model.Movie
 import yamd.g13.pdm.leic.isel.yamd.model.MovieDetail
 import yamdb.g13.pdm.leic.isel.yamdb.view.MainFragment
@@ -264,43 +262,131 @@ object Controller{
             Controller.loadImage(picasso, context, path, width, imageView)
             picasso.invalidate(path)
             voteAverage.rating = Controller.currentMovieDetail!!.voteAverage.toFloat()
-            onInsert(Controller)
+            if(currentFragment == fragmentsMap[Endpoint.UPCOMING] || currentFragment == fragmentsMap[Endpoint.NOW_PLAYING]) {
+
+                val checkBox = activity.findViewById<CheckBox>(R.id.follow)
+                var isToFollowTheMovie = false
+
+                //Toast.makeText(activity, "AAA ${isToFollowTheMovie}", Toast.LENGTH_LONG).show()
+                checkBox.setOnClickListener(followOnClickListener(checkBox, activity))
+                insertMoviesDetailsInDB(context, activity, Controller, isToFollowTheMovie)
+            }
+
+
         }
     }
 
-    public fun getController() : Controller{
-        return Controller
-    }
 
-    fun onInsert(controller: Controller) {
-        //Toast.makeText(this, "BEGIN Insert in DB movieDetails", Toast.LENGTH_LONG).show()
-
+    fun insertMoviesDetailsInDB(context: Context, activity: Activity, controller: Controller, isToFollowTheMovie: Boolean) {
         var d = controller.currentMovieDetail
-        var details = MovieDetail(d!!.id, d.title , d.voteAverage, d.voteCount, d.popularity,
-        d.poster_path, d.overView , d.releaseDate)
 
-        val movieDatails = ContentValues()
-        movieDatails.put(MoviesContract.DetailsTable.MOVIE_ID, d!!.id)
-        movieDatails.put(MoviesContract.DetailsTable.TITLE,  d.title)
+        var mProjection = arrayOf("id", "title")
+        val mSelectionArgs = arrayOf("")  // Initializes an array to contain selection arguments
+        val mSelection = "id = ${d!!.id}"
+        var cursor = controller.contentResolver!!.query(MoviesContract.DetailsTable.CONTENT_URI, mProjection, mSelection, null, null, null)
 
-        movieDatails.put(MoviesContract.DetailsTable.VOTE_AVERAGE, d!!.voteAverage.toFloat())
-        movieDatails.put(MoviesContract.DetailsTable.VOTE_COUNT, d!!.voteCount)
-        movieDatails.put(MoviesContract.DetailsTable.POPULARITY, d!!.popularity)
-        movieDatails.put(MoviesContract.DetailsTable.POSTER_PATH, d!!.poster_path)
-        movieDatails.put(MoviesContract.DetailsTable.OVERVIEW, d!!.overView)
-        movieDatails.put(MoviesContract.DetailsTable.RESLEASE_DATE, d!!.releaseDate)
+        if(cursor != null){
+            try{
+                if(cursor.count > 0) {
+                    Toast.makeText(activity, "Already inserted in DB (EXIST!!!)", Toast.LENGTH_LONG).show()
+                    cursor.moveToNext()
+                    Toast.makeText(activity, "=> " + cursor.getString(0).toString(),  Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity,"Title: " + cursor.getString(1).toString(), Toast.LENGTH_LONG).show()
+                }else {
+                    Toast.makeText(activity, "Insert in DB", Toast.LENGTH_LONG).show()
+                    var d = controller.currentMovieDetail
+                    val movieDatails = ContentValues()
+                    movieDatails.put(MoviesContract.DetailsTable.MOVIE_ID, d!!.id)
+                    movieDatails.put(MoviesContract.DetailsTable.TITLE,  d.title)
+                    movieDatails.put(MoviesContract.DetailsTable.VOTE_AVERAGE, d!!.voteAverage.toFloat())
+                    movieDatails.put(MoviesContract.DetailsTable.VOTE_COUNT, d!!.voteCount)
+                    movieDatails.put(MoviesContract.DetailsTable.POPULARITY, d!!.popularity)
+                    movieDatails.put(MoviesContract.DetailsTable.POSTER_PATH, d!!.poster_path)
+                    movieDatails.put(MoviesContract.DetailsTable.OVERVIEW, d!!.overView)
+                    movieDatails.put(MoviesContract.DetailsTable.RELEASE_DATE, d!!.releaseDate)
+                    movieDatails.put(MoviesContract.DetailsTable.FOLLOW, d!!.isToFollowMovie)
 
-        controller.contentResolver!!.insert(
-                MoviesContract.DetailsTable.CONTENT_URI,
-                movieDatails
-        )
+                    controller.contentResolver!!.insert(
+                            MoviesContract.DetailsTable.CONTENT_URI,
+                            movieDatails
+                    )
+               }
 
-        //Toast.makeText(this, "Insert in DB movieDetails", Toast.LENGTH_LONG).show()
-        Log.i("Inserted movie ", controller.currentMovieDetail!!.title +" into db")
+            }catch (e: Exception){
+                Toast.makeText(activity, "ERROR ${e.message}", Toast.LENGTH_LONG).show()
 
+            }
+        }
     }
 
 
+    fun insertMoviesDetailsInDB2(context: Context, activity: Activity, controller: Controller, isToFollowTheMovie: Boolean) {
+        var d = controller.currentMovieDetail
+
+        var mProjection = arrayOf("id", "poster_path", "title", "vote_average", "vote_count", "popularity", "overview", "release_date", "follow")
+        val mSelectionArgs = arrayOf("")  // Initializes an array to contain selection arguments
+        val mSelection = "id = ${d!!.id}"
+        var cursor = controller.contentResolver!!.query(MoviesContract.DetailsTable.CONTENT_URI, mProjection, mSelection, null, null, null)
+
+        if(cursor != null){
+            try{
+                if(cursor.count > 0) {
+                    cursor.moveToNext()
+                    //controller.contentResolver!!.delete( MoviesContract.DetailsTable.CONTENT_URI, mSelection, null)
+                    Toast.makeText(activity, "=> " + cursor.getString(0).toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Title: " + cursor.getString(1).toString(), Toast.LENGTH_LONG).show()
+
+                    var d = controller.currentMovieDetail
+                    val movieDatails = ContentValues()
+                    movieDatails.put(MoviesContract.DetailsTable.MOVIE_ID, cursor.getString(0).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.POSTER_PATH, cursor.getString(1).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.TITLE, cursor.getString(2).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.VOTE_AVERAGE, cursor.getString(3).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.VOTE_COUNT, cursor.getString(4).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.POPULARITY, cursor.getString(5).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.OVERVIEW, cursor.getString(6).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.RELEASE_DATE, cursor.getString(7).toString())
+                    movieDatails.put(MoviesContract.DetailsTable.FOLLOW, isToFollowTheMovie)
+
+                    controller.contentResolver!!.insert(
+                            MoviesContract.DetailsTable.CONTENT_URI,
+                            movieDatails
+                    )
+                }
+
+            }catch (e: Exception){
+                Toast.makeText(activity, "ERROR ${e.message}", Toast.LENGTH_LONG).show()
+
+            }
+        }
+    }
+
+
+    fun updateMoviesDetailsInDB(controller: Controller, isToFollowTheMovie: Boolean) {
+        var d = controller.currentMovieDetail
+        Log.e("GIN", d!!.id.toString())
+        val mSelection = "id = ${d!!.id}"
+        var contentValue = ContentValues()
+        contentValues!!.put("follow", 1)
+        var cursor1 = this.contentResolver!!.update(MoviesContract.DetailsTable.CONTENT_URI, contentValue, mSelection, null)
+
+//        var cursor1 = controller.contentResolver!!.update(MoviesContract.DetailsTable.CONTENT_URI, contentValue, mSelection, null)
+    }
+
+
+
+    class followOnClickListener(var checkBox: CheckBox, var activity: Activity) : View.OnClickListener{
+        override fun onClick(p0: View?) {
+            if (checkBox != null) {
+                Toast.makeText(activity, "I'm following this Movie?? ${checkBox!!.isChecked}", Toast.LENGTH_SHORT).show()
+                //updateMoviesDetailsInDB(Controller, checkBox!!.isChecked)
+                insertMoviesDetailsInDB2(activity, activity, Controller, true)
+            }
+
+
+        }
+
+    }
 
 }
 

@@ -1,28 +1,21 @@
 package yamd.g13.pdm.leic.isel.yamd.view
 
-import android.app.AlarmManager
 import android.app.LoaderManager
-import android.app.PendingIntent
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
 import android.content.*
 import android.database.Cursor
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.os.SystemClock
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_detail.*
 import yamd.g13.pdm.leic.isel.yamd.R
 import yamd.g13.pdm.leic.isel.yamd.control.*
-import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.FollowedMovieReminder
+import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util
+import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util.Companion.activity
 import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util.Companion.scheduleJob
-import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.service.OurJobService
+import yamd.g13.pdm.leic.isel.yamd.control.jobscheduler.broadcastreceiver.Util.Companion.checkFollowedMovieToSendAReminder
 import yamd.g13.pdm.leic.isel.yamd.control.provider.EndpointBundle
 import yamdb.g13.pdm.leic.isel.yamdb.view.MainFragment
 
@@ -86,31 +79,12 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
         //var movieDescription = activity.findViewById<TextView>(R.id.movie_overview)
         //var checkBox = follow as CheckBox
 
-        if(checkBox == null) Log.e("ERROR", "dfhgjdskkljfhjksk")
-
-        if(checkBox != null && checkBox!!.isChecked){
-           // scheduleJob()
-        }
         scheduleJob(applicationContext, this)
-        showFollowedMovieReminder()
+        //checkFollowedMovieToSendAReminder(applicationContext, this)
+        Util.activity = this
+        Util.context = applicationContext
     }
 
-    fun showFollowedMovieReminder(){
-        var intent  = Intent(this, FollowedMovieReminder::class.java)
-        intent.putExtra("KEY", "VALUE")
-
-        var pendingIntent = PendingIntent.getBroadcast(applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        var alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        var currentTimeInMilliseconds = SystemClock.elapsedRealtime()
-        val ONE_HOUR = 60 * 60* 1000
-        val DEZ_SEGUNDOS = 10 * 1000
-
-        var notifyTime = currentTimeInMilliseconds + DEZ_SEGUNDOS
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, notifyTime, DEZ_SEGUNDOS.toLong(), pendingIntent)
-       // alarmManager.set(AlarmManager.ELAPSED_REALTIME, notifyTime, pendingIntent)
-    }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

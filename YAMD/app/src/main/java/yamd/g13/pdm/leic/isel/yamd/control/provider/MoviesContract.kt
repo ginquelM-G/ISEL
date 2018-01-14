@@ -79,10 +79,11 @@ object MoviesContract {
         val VOTE_COUNT = "vote_count"
         val POPULARITY = "popularity"
         val OVERVIEW = "overview"
-        val RESLEASE_DATE = "release_date"
+        val RELEASE_DATE = "release_date"
+        val FOLLOW = "follow"
 
         val PROJECT_ALL = arrayOf(COL_ID, MOVIE_ID, POSTER_PATH, TITLE, VOTE_AVERAGE, VOTE_COUNT,
-                POPULARITY, OVERVIEW, RESLEASE_DATE)
+                POPULARITY, OVERVIEW, RELEASE_DATE, FOLLOW)
 
 
 

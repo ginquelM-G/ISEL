@@ -46,7 +46,8 @@ object DbSchema {
         val COL_VOTE_COUNT = MoviesContract.DetailsTable.VOTE_COUNT
         val COL_POPULARITY = MoviesContract.DetailsTable.POPULARITY
         val COL_OVERVIEW = MoviesContract.DetailsTable.OVERVIEW
-        val COL_RESLEASE_DATE = MoviesContract.DetailsTable.RESLEASE_DATE
+        val COL_RELEASE_DATE = MoviesContract.DetailsTable.RELEASE_DATE
+        val COL_FOLLOW = MoviesContract.DetailsTable.FOLLOW
 
         val DDL_CREATE_TABLE =
                 "CREATE TABLE " + TBL_NAME + " ( " +
@@ -58,7 +59,8 @@ object DbSchema {
                         COL_VOTE_COUNT + " INTEGER, " +
                         COL_POPULARITY + " REAL, "+
                         COL_OVERVIEW + " TEXT, " +
-                        COL_RESLEASE_DATE + " TEXT )"
+                        COL_RELEASE_DATE + " TEXT, " +
+                        COL_FOLLOW + " TEXT )"
 
         val DDL_DROP_TABLE = "DROP TABLE IF EXISTS " + TBL_NAME
     }

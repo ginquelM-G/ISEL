@@ -10,4 +10,5 @@ data class MovieDetail(val id : Int,
                        val popularity : Int,
                        val poster_path : String,
                        val overView : String,
-                       val releaseDate : String)
+                       val releaseDate : String,
+                       val isToFollowMovie : Boolean)

@@ -23,7 +23,8 @@ class GetMovieDetails : Command(){
                 md.getInt("popularity"),
                 md.getString("poster_path"),
                 md.getString("overview"),
-                md.getString("release_date")) as D)
+                md.getString("release_date"),
+                false) as D)
         return result
     }
 

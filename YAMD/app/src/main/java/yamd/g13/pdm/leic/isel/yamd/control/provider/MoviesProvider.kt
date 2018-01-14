@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteConstraintException
 import android.database.sqlite.SQLiteQueryBuilder
 import android.net.Uri
 import android.text.TextUtils
+import android.util.Log
+import android.widget.Toast
 import java.util.ArrayList
 
 /**
@@ -135,7 +137,23 @@ class MoviesProvider : ContentProvider() {
     }
 
     override fun update(uri: Uri?, values: ContentValues?, selection: String?, selectionArgs: Array<out String>?): Int {
-        throw UnsupportedOperationException("not implemented")
+        try{
+            Toast.makeText(context, "LOG: "+ context.contentResolver.toString(), Toast.LENGTH_LONG).show()
+            val qbuilder = SQLiteQueryBuilder()
+            val db = dbHelper!!.readableDatabase
+
+            //val cursor =  qbuilder.query(db,  selection, selectionArgs, null, null, sortOrder)
+
+            //return contentResolver.update(uri, values,  "id=389015", null)
+
+            // qbuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder)
+            return   context.applicationContext.contentResolver.update(MoviesContract.DetailsTable.CONTENT_URI, values, selection, selectionArgs)
+
+        }catch (e: Exception){
+            Toast.makeText(context, "ERROR: "+ e.message, Toast.LENGTH_LONG).show()
+            Log.e("ERROR: ", e.message)
+        }
+        return 0
     }
 
     override fun delete(uri: Uri?, selection: String?, selectionArgs: Array<out String>?): Int {
