@@ -1,7 +1,0 @@
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\bin\Debug\UnitTest.exe.config
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\bin\Debug\UnitTest.exe
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\bin\Debug\UnitTest.pdb
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\obj\Debug\UnitTest.csprojResolveAssemblyReference.cache
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\obj\Debug\UnitTest.csproj.CoreCompileInputs.cache
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\obj\Debug\UnitTest.exe
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\UnitTest\obj\Debug\UnitTest.pdb
