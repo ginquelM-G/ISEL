@@ -1,4 +1,6 @@
-﻿namespace Model
+﻿using Enhancer;
+
+namespace Model
 {
     class Stock {
         public Stock(string name, string index) { }
@@ -14,8 +16,8 @@
         public virtual int Price { get; set; } // set dará excepção para valores < 58
                                                // dará excepção se o estado de this ou algum dos parâmetros tiver sido alterado
                                                // pela execução do método anotado -- BuildInterest
-        [NoEffects]
-        public double BuildInterest(Portfolio port, Store st) { ... }
+        //[NoEffects]
+        //public double BuildInterest(Portfolio port, Store st) { }
     }
 
     class Program

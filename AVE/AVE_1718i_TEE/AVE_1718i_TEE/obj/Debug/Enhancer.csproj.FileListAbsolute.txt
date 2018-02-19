@@ -1,6 +1,0 @@
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\bin\Debug\Enhancer.exe.config
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\bin\Debug\Enhancer.exe
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\bin\Debug\Enhancer.pdb
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\obj\Debug\Enhancer.csproj.CoreCompileInputs.cache
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\obj\Debug\Enhancer.exe
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\AVE_1718i_TEE\obj\Debug\Enhancer.pdb

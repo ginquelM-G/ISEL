@@ -1,2 +1,0 @@
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
-C:\Users\User01\Documents\_GIN\UC\AVE\1718i\Trab\AVE_1718i_TEE\Model\obj\Debug\Model.csproj.CoreCompileInputs.cache

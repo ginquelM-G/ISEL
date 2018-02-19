@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3BD88D2C-3530-4F3E-A547-426E62749067}</ProjectGuid>
+    <ProjectGuid>{42C1B53D-EDE2-4125-8594-474EA65A42D9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Model</RootNamespace>
     <AssemblyName>Model</AssemblyName>
@@ -47,12 +47,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AVE_1718i_TEE\Enhancer.csproj">
-      <Project>{ce2e29be-a282-4984-ac6b-e06868d7a07d}</Project>
-      <Name>Enhancer</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
