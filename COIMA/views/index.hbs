@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <h6>Welcome {{username}} to {{title}}</h6>
-    <p>{{title}}</p>
-  </head>
-  <body>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> {{!--
+  <h6>Welcome {{username}} to {{title}}</h6>
+  <p>{{title}}</p> --}}
+</head>
+{{!--
+
+<body background="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg"> --}}
+
+  <body background="https://images-na.ssl-images-amazon.com/images/I/21%2BOVqzNo7L.png">
+    <h1  class="display-4 text-white" style="padding-top:50px"><b>Welcome {{username}} to {{title}}</b></h1>
+    <h6 class="text-white">{{title}}</h6>
     {{{body}}}
 
-     <div class="col-xs-4">
-     <form action="/search?">
-        Movie Name:<br>
-        <input type="text" name="name" value="">
-        <input type="submit" value="Submit">
-      </form> 
+    <div class="container" style="padding-top:100px">
+      <form action="/search?">
+        <label class="text-white">Movie Name:</label>
+        <br>
+        <input class="btn btn-default btn-lg col-xl-9" type="text" name="name" value="" placeholder="search">
+        <input class="btn btn-default btn-lg col-xl-2" type="submit" value="Search ">
+      </form>
 
-       {{!--  <form method="POST" action="/classics2">
-            <input type="submit" value="....">
-            <input type="hidden" name="id" value="{{id}}">
-            <input type="hidden" name="title" value="{{title}}">
-        </form> --}}
-       
+      {{!--
+      <form method="POST" action="/classics2">
+        <input type="submit" value="....">
+        <input type="hidden" name="id" value="{{id}}">
+        <input type="hidden" name="title" value="{{title}}">
+      </form> --}}
+
     </div>
 
 
   </body>
+
 </html>

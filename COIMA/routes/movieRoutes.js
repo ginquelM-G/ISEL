@@ -12,6 +12,12 @@ router.get('/', function(req, resp, next) {
     resp.render('index', { title: 'Chelas Open Internet Movie Application', username: 'User' });
 })
 
+router.get('/account/:username', function(req, resp, next) {
+    //res.render('index', { title: 'Chelas Open Internet Movie Application' });
+    console.log('/ Home Page' + resp)
+    resp.render('index', { title: 'Chelas Open Internet Movie Application', username: req.params.username });
+})
+
 
 // ?? /search?name={query} ||  /movies?name={query}
 router.get('/search', (req, resp, next) =>{

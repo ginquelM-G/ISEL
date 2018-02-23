@@ -1,31 +1,81 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>login</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="col-md-4"></div>
-    <div class="col-md-4 panel well">
-        {{#if loginError.message}}
-        <div class="alert alert-warning" role="alert">
-            <strong>Warning! {{loginError.message}}</strong> 
+    {{!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ"
+        crossorigin="anonymous"> --}} {{!--
+    <link rel="stylesheet" href="/public/stylesheets/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> {{!--
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="../public/stylesheets/bootstrap.min.js"></script>
+    <script src="../public/stylesheets/bootstrap.js"></script> --}}
+
+</head>
+
+<body background="http://flower-wallpaper.org/wp-content/uploads/2016/09/best-wallpaper-ever9.jpg" class="container">
+
+    <div class="row">
+        <div class="col-xl-12">
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <a class="navbar-brand" href="#">Home</a>
+
+                <!-- Toggler/collapsibe Button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="classics">Classics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="best_all_time">Best All Time</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="imdb_most_rated">IMDB Most Rated</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="www.abola.pt">To Seen</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="www.abola.pt">Seen</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
-        {{/if}}
-        <form action="/login" method="post">
-            <div class="form-group">
-                <label>Username:</label>
-                <input type="text" name="username" class="form-control"/>
+
+
+
+        <div class="container">
+            <br>
+            <br>
+            <div class="col-*-*" style="padding-top:50px">
+                {{#if loginError.message}}
+                <div class="alert alert-warning" role="alert">
+                    <strong>Warning! {{loginError.message}}</strong>
+                </div>
+                {{/if}}
+                <form action="/login" method="post">
+                    <div class="form-group"  >
+                        <h4><label class="text-white">Username:</label></h4>
+                        <input type="text" name="username" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <h4><label class="text-white">Password:</label></h4>
+                        <input type="password" name="password" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-xl btn-block" type="submit" value="Log In" class="form-control" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Password:</label>
-                <input type="password" name="password" class="form-control"/>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Log In" class="form-control"/>
-            </div>
-        </form>
+        </div>
     </div>
-    <div class="col-md-4"></div>
-  </body>
+</body>
+
 </html>
