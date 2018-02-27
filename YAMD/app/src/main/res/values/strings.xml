@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">YAMD</string>
+    <string name="title_popular" translatable="true">Popular</string>
+    <string name="title_now_playing" translatable="true">Now Playing</string>
+    <string name="title_upcoming" translatable="true">Upcoming</string>
+    <string name="search_action_menu" translatable="true">Search</string>
+    <string name="title_more" translatable="true">More</string>
+    <string name="title_activity_detail">Movie detail</string>
+    <string name="overview" translatable="true">Overview</string>
+    <string name="vote_average" translatable="true">Vote Average</string>
+    <string name="follow" translatable="true">Follow</string>
+    <string name="followMovieText" translatable="true">Do you want to follow this movie?</string>
+    <string name="action_settings">Settings</string>
+    <string name="about_action_menu">About</string>
+    <string name="title_activity_about">About</string>
+    <string name="about_text">This application was made in the field of the Programming
+        in Mobile Devices by students Tony Mendes, No. 40323 and Ginquel Moreira,
+        No. 39642, group 13 of the LI51N class.</string>
+    <string name="authors">
+        \nProfessor: João Trindade\n \nStudents:\n \tTony Mendes, No. 40323\n \tGinquel Moreira, No. 39642\n
+    </string>
+
+    <string name="follow_movie_notification_title_template">Follow movie: %1$s</string>
+
+    <!-- TODO: remove this placeholder text -->
+    <string name="follow_movie_notification_placeholder_text_template">You said %1$s and lorem ipsum
+        dolor sit amet, consectetur adipiscing elit. Etiam non enim magna. Morbi dictum, velit vel
+        semper venenatis, magna odio volutpat velit, at ullamcorper nulla lacus sed turpis.
+        Pellentesque vitae metus elit, nec tincidunt tellus. Integer sed nisl sem, ullamcorper
+        ornare lacus. Duis ac mauris sed massa congue volutpat. Donec sed erat sit amet turpis
+        viverra rhoncus sit amet nec magna. Donec lacinia ligula at libero volutpat volutpat nec nec
+        tortor.
+    </string>
+</resources>

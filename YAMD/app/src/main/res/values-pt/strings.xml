@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YAMD</string>
+    <string name="title_popular">Popular</string>
+    <string name="title_now_playing">Em Cartaz</string>
+    <string name="title_upcoming">Em Breve</string>
+    <string name="search_action_menu">Popular</string>
+    <string name="title_more">Mais</string>
+    <string name="overview">Síntese</string>
+    <string name="vote_average">Média de Votos</string>
+    <string name="follow">Seguir</string>
+    <string name="followMovieText" translatable="true">Queres seguir este filme?</string>
+    <string name="about_action_menu">Sobre</string>
+    <string name="action_settings">Configurações</string>
+    <string name="title_activity_detail">Detalhe do filme</string>
+    <string name="title_activity_about">Sobre</string>
+    <string name="about_text">Esta aplicação foi feita no ambito da cadeira Programação         em Dispositivos  Móveis pelos alunos Tony Mendes, nº 40323 e Ginquel Moreira,         nº 39642, grupo 13 da turma LI51N.</string>
+    <string name="authors">nProfessor: João Trindade\n  \nAlunos:\n  \tTony Mendes, nº 40323\n \tGinquel Moreira, nº 39642\n</string>
+</resources>
