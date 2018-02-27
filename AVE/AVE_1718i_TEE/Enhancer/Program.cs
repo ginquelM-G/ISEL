@@ -102,7 +102,7 @@ namespace Enhancer
     }
 
 
-    class Stock
+   public  class Stock
     {
         public Stock(string name, string index) { }
         [NonNull]

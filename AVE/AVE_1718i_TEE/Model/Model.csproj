@@ -48,5 +48,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Enhancer\Enhancer.csproj">
+      <Project>{66d7629e-6c6c-4c82-99be-ced6566dc6e9}</Project>
+      <Name>Enhancer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

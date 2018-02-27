@@ -1,0 +1,7 @@
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\bin\Debug\UnitTests.exe.config
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\bin\Debug\UnitTests.exe
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\bin\Debug\UnitTests.pdb
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\obj\Debug\UnitTests.csprojResolveAssemblyReference.cache
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\obj\Debug\UnitTests.csproj.CoreCompileInputs.cache
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\obj\Debug\UnitTests.exe
+C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL\AVE\AVE_1718i_TEE\UnitTests\obj\Debug\UnitTests.pdb
