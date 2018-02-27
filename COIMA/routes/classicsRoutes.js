@@ -10,6 +10,8 @@ router.use((req, resp, next)=>{
 
 
 function addOrDel(req, resp, next){
+    console.log('Classic USERNAME: ' + req.body.username + ' == ' + req.params.username + " req.user: " + req.user )
+    console.log(JSON.stringify(req.user))
     if(!req.user) return resp.redirect('/login')
     req.user.classics.forEach(element => {
         console.log(element)

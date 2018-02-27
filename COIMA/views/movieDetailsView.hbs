@@ -1,20 +1,19 @@
 <html>
 
 <head>
+    <script src=""></script>
 </head>
 
-<body>
+<body id="html" background="/image/background.png">
     <br>
     <br>
-    <div style="background-color:black;color:white;paddind:20px;clear: left;height:250px">
+    <p id="userName" style="visibility: hidden">{{user}}</p>
+     <div style="background-color:black;color:white;paddind:20px;clear: left;height:250px">
         <p style="float: left;">
             <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250" hspace="60px" />
             <br>
         </p>
-        {{!--
-        <p style="float: left;">
-            <img src="http://placekitten.com/g/200/200" height="200" width="200" border="1px">
-        </p> --}}
+
         <p>
             <br>Movie Id: {{id}}
             <br>
@@ -25,26 +24,7 @@
             <br>Director: {{director}}
         </p>
     </div>
-    {{!--
-    <p>
-        <img src='https://image.tmdb.org/t/p/original/stQoHvo0q6ZcEkji2Z1wlAxKnDq.jpg' width="250" height="250" />
-        <br>
-    </p>--}} {{!--
-    <p>
-        <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250" />
-        <br>
-    </p> --}} {{!--
-    <ul>
-        <li>Id: {{id}}</li>
-        <li>Title: {{original_title}}</li>
-        <li>Overview: {{overview}}</li>
-        <li>Director: {{director}}</p>
-        </li>
-    </ul>
-    --}} {{!--
 
-    <p>
-        <b>Director:</b> {{director}}</p>--}}
     <div class="container" style="background-color:antiquewhite;color:Black;padding:0px;">
         <table class="container" aria-colspan="40">
             <tr>
@@ -67,53 +47,73 @@
 
 
 
+    <script>
+
+        function showMSG() {
+            {{!-- 
+            var commentAdded = document.getElementById("txtAreaComment").value
+            document.getElementById("addComment").innerHTML = commentAdded
+            var commentStructure = document.getElementById("divAddComment")
+
+            //commentStructure.style.visibility = "none"
+            commentStructure = commentStructure.outerHTML.replace("hidden", "none")
+           
+            document.getElementById("allComments").innerHTML += commentStructure
+            //console.log(document.getElementById("html").outerHTML)
+            --}}
+        } 
+
+        function reply(){
+         var commentAdded = document.getElementById("txtAreaComment").value
+            document.getElementById("addReply2").innerHTML = commentAdded
+            var commentStructure = document.getElementById("divAddComment")
+
+            //commentStructure.style.visibility = "none"
+            commentStructure = commentStructure.outerHTML.replace("hidden", "none")
+           
+            //document.getElementById("addReply").innerHTML += commentStructure
+            document.getElementById("allComments").innerHTML += commentStructure
+            //console.log(document.getElementById("html").outerHTML)
+            
+            
+        }
+    </script>
 
 
-    <div class="divBtComment">
-        <h2>
-            <br>Leave your comments</h2>
-        <form>
-            <div class="form-group">
-                {{!--
-                <label for="usr">Comments:</label> --}}
-                <input type="text" class="form-control" id="inputTxtComment">
-            </div>
-        </form>
-        <input type="submit" value="Submit" class='btn'> {{!--
-        <button onclick="addComment()">Submit Comment</button> --}} {{!--
-        <input id='txtAddedComment' type="text"> --}} {{!--
-        <input id="pdffile" style="visibility: visible;" name="file" type="file" /> --}}
-
+    <div id="divCommentStructure">
         <div id="divAddComment" style="visibility: hidden;">
             <div class="media">
                 <div class="media-left">
-                    <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" />
+                    <img src='../image/avatar.png' width="60" height="60" hspace="10px"/>
+                   {{!--   <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" /> --}}
                 </div>
 
                 <div class="media-body">
                     <h4 class="media-heading">UserName
                         <small>
-                            <i id='postDate'></i>
+                            <i id='postDate'>getDate()</i>
                         </small>
                     </h4>
-                    <p id='txtAdded'>...</p>
-                    <input type="submit" value="reply" class='btnReplyI btn-primary btn-xs'> {{!--
-                    <button type="button" id="btnReplyB">ReplyB</button> --}} {{!--
-                    <input type="submit" value="reply" class='btnReply btn-primary btn-xs'>
-                    <button type="button" class="btn btn-default btn-sm">ReplyB2</button> --}}
+                    <p id='addComment'>.................</p>
+                    <p id='addReply2'></p>
+                    <div id='addReply'></div>
+                    <sub>
+                        <input type="button" value="reply" class='btn btn-default btn-xs' onclick="reply()">
+                    </sub>
                     <hr>
                 </div>
             </div>
         </div>
-
-        <div id="divAddCommentEmpty">
-            {{!--
-            <p>__________________----___________</p> --}}
-        </div>
-
-
     </div>
 
+    <div class="divBtComment">
+        <div id="allComments">
+            
+        </div>
+        <h2><br>Leave your comments</h2>
+        <textarea class="form-control" rows="5" id="txtAreaComment"></textarea>
+        <input id="submitBt" type="submit" value="Submit" class='btn' onclick="showMSG()">
+    </div>
 
 
 

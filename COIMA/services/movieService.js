@@ -73,7 +73,8 @@ function init(dataSource) {
     //2. https://api.themoviedb.org/3/movie/860?api_key=*****
     function getMoviesDetails(movieId, cb) {
         const URI = `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}`;
-
+        cb(null,null)
+ 
         checkRequest(response, () => {
             if (cache.checkIfURIisInTheCache(URI)) {
                 console.log(`\nIs in the cache the URL: ${URI}`)
@@ -120,6 +121,7 @@ function init(dataSource) {
                 cb(credits)
             })
         })
+        
         console.log("getMoviesCredits END")
         // return details
     }

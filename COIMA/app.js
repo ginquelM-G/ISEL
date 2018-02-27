@@ -31,6 +31,9 @@ hbs.registerPartials(__dirname + '/views/partials')
 // --------------------
 router.use(bodyParser.urlencoded({ extended: false }))
 router.use(express.static(path.join(__dirname, 'public'))) // ter acesso aos ficheiros do directorio public(ex: .css)
+router.use(express.static('views')) 
+router.use(express.static('routes'))
+//router.use('/static', express.static(path.join(__dirname, '/routes')))
 router.use(cookieParser())
 router.use(session({secret: 'keyboard cat', resave: false, saveUninitialized: true }))
 /*
@@ -70,7 +73,7 @@ server.listen(port)
 
 movieRouter.use((err, req, resp, next) => {
     resp.statusCode = 500
-    resp.setHeader('Content-Type', 'text/html')
+    //resp.setHeader('Content-Type', 'text/html')
     resp.end(err.message)    
 })
 

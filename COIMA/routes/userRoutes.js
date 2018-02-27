@@ -21,7 +21,7 @@ router.get('/login', function(req, res, next) {
 
 router.post('/login', (req, resp, next)=>{
   //console.log(req.body)
-  console.log('Beggin USERNAME: ' + req.body.username )
+ // console.log('Beggin USERNAME: ' + req.body.username + ' == ' + req.params.username + " req.user: " + req.username )
   userService.authenticate(req.body.username, req.body.password, (err, user, info)=>{
     if(err) return next(err)
     //if(info) return next(new Error(info))
@@ -32,7 +32,7 @@ router.post('/login', (req, resp, next)=>{
     }
     req.logIn(user, (err)=>{
       if(err) return next(err)
-      console.log('USERNAME: ' + req.body.username + ' == ' + user.username)
+      console.log('USERNAME: ' + req.body.username )
       //resp.redirect('/')
       resp.redirect('/account/'+user.username)
     })
