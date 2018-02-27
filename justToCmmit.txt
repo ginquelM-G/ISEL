@@ -1,0 +1,21 @@
+ Volume in drive C is OSDisk
+ Volume Serial Number is 3ED9-AF64
+
+ Directory of C:\Users\User01\Documents\_GIN\UC\_GIT_HUB\ISEL - Trabs\ISEL
+
+27/02/2018  21:05    <DIR>          .
+27/02/2018  21:05    <DIR>          ..
+27/02/2018  21:04             4ÿ493 .gitignore
+27/02/2018  21:04    <DIR>          Benchmark
+27/02/2018  21:04    <DIR>          HtmlEmit
+27/02/2018  21:04    <DIR>          HtmlEmitTest
+27/02/2018  21:04    <DIR>          HtmlReflect
+27/02/2018  21:04    <DIR>          HtmlReflectTest
+27/02/2018  21:05                 0 justToCmmit.txt
+27/02/2018  21:04            35ÿ815 LICENSE
+27/02/2018  21:04             4ÿ209 MovHub.sln
+27/02/2018  21:04    <DIR>          MovHubDb
+27/02/2018  21:04    <DIR>          MovHubWebApp
+27/02/2018  21:04                40 README.md
+               5 File(s)         44ÿ557 bytes
+               9 Dir(s)  293ÿ507ÿ076ÿ096 bytes free
