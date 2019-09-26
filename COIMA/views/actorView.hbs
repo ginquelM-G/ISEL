@@ -1,0 +1,33 @@
+<html>
+    <head>  
+    </head>
+    <body>
+        <p> <br><b>Actor Details</b></p>
+        <ul>
+            <li>Birthday: {{birthday}}</li>
+            <li>Name: {{name}}</li>
+            <li>Biography: {{biography}}</li>      
+        </ul>
+
+        <p><br><br><b>Movies that thet actor as participated...</b></p>
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Character</th>
+            </tr>
+            {{#each cast}}
+                <tr>
+                    <td>
+                        <a href='/../movies/{{id}}'>{{title}}</a>
+                    </td>
+                    <td>{{character}}</td> 
+                     
+
+                </tr>
+               
+            {{/each}}
+        </table>
+
+    </body>
+
+</html>

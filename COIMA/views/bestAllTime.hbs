@@ -1,0 +1,13 @@
+<p></p>
+<h5>Best All Time</h5>
+<table class="table card">
+    {{#each best_all_time}}
+        <tr>
+            <td>
+                <a href="/movies/{{id}}/">
+                    {{title}}
+                </a>
+            </td>
+        </tr>
+    {{/each}}
+</table>

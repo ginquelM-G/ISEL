@@ -1,0 +1,189 @@
+<html>
+
+<head>
+    <script src=""></script>
+</head>
+
+<body id="html" background="/image/background.png">
+    <br>
+    <br>
+    <p id="userName" style="visibility: hidden">{{user}}</p>
+     <div style="background-color:black;color:white;paddind:20px;clear: left;height:250px">
+        <p style="float: left;">
+            <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="250" height="250" hspace="60px" />
+            <br>
+        </p>
+
+        <p>
+            <br>Movie Id: {{id}}
+            <br>
+            <br>Title: {{original_title}}
+            <br>
+            <br>Overview: {{overview}}
+            <br>
+            <br>Director: {{director}}
+        </p>
+    </div>
+
+    <div class="container" style="background-color:antiquewhite;color:Black;padding:0px;">
+        <table class="container" aria-colspan="40">
+            <tr>
+                <th>Character</th>
+                <th>Name</th>
+            </tr>
+            {{#each cast}}
+            <tr>
+                <td>{{character}}</td>
+                <td>
+                    <a href='/../actors/{{id}}'>
+                        {{name}}
+                    </a>
+                </td>
+
+            </tr>
+            {{/each}}
+        </table>
+    </div>
+
+
+
+    <script>
+
+        function showMSG() {
+            {{!-- 
+            var commentAdded = document.getElementById("txtAreaComment").value
+            document.getElementById("addComment").innerHTML = commentAdded
+            var commentStructure = document.getElementById("divAddComment")
+
+            //commentStructure.style.visibility = "none"
+            commentStructure = commentStructure.outerHTML.replace("hidden", "none")
+           
+            document.getElementById("allComments").innerHTML += commentStructure
+            //console.log(document.getElementById("html").outerHTML)
+            --}}
+        } 
+
+        function reply(){
+         var commentAdded = document.getElementById("txtAreaComment").value
+            document.getElementById("addReply2").innerHTML = commentAdded
+            var commentStructure = document.getElementById("divAddComment")
+
+            //commentStructure.style.visibility = "none"
+            commentStructure = commentStructure.outerHTML.replace("hidden", "none")
+           
+            //document.getElementById("addReply").innerHTML += commentStructure
+            document.getElementById("allComments").innerHTML += commentStructure
+            //console.log(document.getElementById("html").outerHTML)
+            
+            
+        }
+    </script>
+
+
+    <div id="divCommentStructure">
+        <div id="divAddComment" style="visibility: hidden;">
+            <div class="media">
+                <div class="media-left">
+                    <img src='../image/avatar.png' width="60" height="60" hspace="10px"/>
+                   {{!--   <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" /> --}}
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">UserName
+                        <small>
+                            <i id='postDate'>getDate()</i>
+                        </small>
+                    </h4>
+                    <p id='addComment'>.................</p>
+                    <p id='addReply2'></p>
+                    <div id='addReply'></div>
+                    <sub>
+                        <input type="button" value="reply" class='btn btn-default btn-xs' onclick="reply()">
+                    </sub>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="divBtComment">
+        <div id="allComments">
+            
+        </div>
+        <h2><br>Leave your comments</h2>
+        <textarea class="form-control" rows="5" id="txtAreaComment"></textarea>
+        <input id="submitBt" type="submit" value="Submit" class='btn' onclick="showMSG()">
+    </div>
+
+
+
+
+    <!--Nested media object -->
+    {{!--
+    <br>
+    <div class="container">
+        <div class="media">
+            <div class="media-left">
+                <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" />
+            </div>
+
+            <div class="media-body">
+                <h4 class="media-heading">John
+                    <small>
+                        <i>Posted on February 19, 2016</i>
+                    </small>
+                </h4>
+                <p>LOOL nice movie, yes it's</p>
+                <hr>
+
+                <!--Nested media object -->
+                <div class="media">
+                    <div class="media-left">
+                        <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" />
+                    </div>
+
+                    <div class="media-body">
+                        <h4 class="media-heading">Ana
+                            <small>
+                                <i>Posted on February 19, 2016</i>
+                            </small>
+                        </h4>
+                        <p>GUN, ngrateice movie, yes it's</p>
+                        <hr>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <!--Nested media object -->
+        <div class="media">
+            <div class="media-left">
+                <img src='https://image.tmdb.org/t/p/original{{poster_path}}' width="30" height="30" hspace="60px" />
+            </div>
+
+            <div class="media-body">
+                <h4 class="media-heading">Maria
+                    <small>
+                        <i>Posted on February 19, 2016</i>
+                    </small>
+                </h4>
+                <p>GUN, ngrateice movie, yes it's</p>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div id="demo">
+        <h2>The XMLHttpRequest Object</h2>
+        <button type="button" onclick="loadDoc()" id='bt'>Change Content</button>
+    </div> --}}
+</body>
+
+</html>

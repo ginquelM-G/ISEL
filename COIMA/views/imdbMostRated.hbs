@@ -1,0 +1,13 @@
+<p></p>
+<h5>IMDB Most Rated</h5>
+<table class="table card">
+    {{#each imdb_most_rated}}
+        <tr>
+            <td>
+                <a href="/movies/{{id}}/">
+                    {{title}}
+                </a>
+            </td>
+        </tr>
+    {{/each}}
+</table>
